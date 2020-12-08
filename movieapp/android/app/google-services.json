@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "19154245253",
+    "firebase_url": "https://movie-app-1ccdd.firebaseio.com",
+    "project_id": "movie-app-1ccdd",
+    "storage_bucket": "movie-app-1ccdd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19154245253:android:64161dbbbc0459d989fbec",
+        "android_client_info": {
+          "package_name": "com.labtenterprise.movieapp_dominica"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "19154245253-9hua6c74bdmg8q485cnvfpea5dekq2sa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_3SeJFx8djQNKkd73vmJDw8nPuYWvGFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "19154245253-9hua6c74bdmg8q485cnvfpea5dekq2sa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
