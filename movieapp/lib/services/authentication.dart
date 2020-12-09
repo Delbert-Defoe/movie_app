@@ -29,12 +29,29 @@ class AuthService {
 
 //custom user object
   LocalUser _userFromFirebaseUser(User user) {
-    final UserModel _userModel = UserModel();
+    final LocalUser _localUser = LocalUser();
+    String uid;
+    String username;
+    List<dynamic> preferences;
+    int points;
 
     if (user != null) {
-      getUserData(user.uid).then((value) => {_userModel.createUser(value)});
+      getUserData(user.uid).then((value) => {
+            if (value == null)
+              {username = null, preferences = null, points = null}
+            else
+              {
+                username = value['name'],
+                preferences = value['prefrences'],
+                points = value['points']
+              }
+          });
 
-      return LocalUser(uid: user.uid);
+      return LocalUser(
+          uid: user.uid,
+          username: username,
+          preferences: preferences,
+          points: points);
     } else if (user == null) {
       return null;
     }
@@ -77,8 +94,8 @@ class AuthService {
 
       User user = _result.user;
 
-      await DatabaseService(uid: user.uid)
-          .updateUserData(user.displayName, ['none'], 5);
+      //  await DatabaseService(uid: user.uid)
+      //      .updateUserData(user.displayName, ['none'], 5);
 
       return _userFromFirebaseUser(user);
     } catch (e) {

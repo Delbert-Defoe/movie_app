@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var userProvider = Provider.of<UserModel>(context);
+    LocalUser user = LocalUser();
     var devHeight = MediaQuery.of(context).size.height;
     var devWidth = MediaQuery.of(context).size.width;
     return SafeArea(
@@ -65,7 +65,7 @@ class ProfileScreen extends StatelessWidget {
                     size: devWidth / 1.7,
                   )),
             ),
-            userProvider.user == null
+            user.username == null
                 ? Center(
                     child: Text(
                       'You are not currently Logged in',
@@ -76,7 +76,7 @@ class ProfileScreen extends StatelessWidget {
                     padding: EdgeInsets.all(20),
                     child: Center(
                         child: Text(
-                      'Ryan Defoe',
+                      user.username,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 50,

@@ -24,7 +24,7 @@ void main() async {
       create: (context) => ItemProvider(),
     ),
     ChangeNotifierProvider(
-      create: (context) => UserModel(),
+      create: (context) => LocalUser(),
     )
   ], child: MyApp()));
 }

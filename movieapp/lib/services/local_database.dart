@@ -10,6 +10,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/items_model.dart';
 
+/*
 class LocalDatabase {
   //initiating the database variables
   static final _dbName = 'EMovies.db';
@@ -118,3 +119,4 @@ class LocalDatabase {
     return _response;
   }
 }
+*/

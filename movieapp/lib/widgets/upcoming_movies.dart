@@ -8,6 +8,7 @@ import 'package:movieapp/services/database.dart';
 import 'package:movieapp/animations/pageRouteScaleAnimation.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class UpcomingMovies extends StatefulWidget {
   @override
@@ -79,9 +80,11 @@ class _UpcomingMoviesState extends State<UpcomingMovies> {
                   borderRadius: BorderRadius.circular(20),
                   child: Hero(
                     tag: movie.imageUrl,
-                    child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: snapshot.data,
+                    child: CachedNetworkImage(
+                      placeholder: (context, url) => CircularProgressIndicator(
+                        backgroundColor: Theme.of(context).primaryColor,
+                      ),
+                      imageUrl: snapshot.data,
                       height: 300,
                       width: 220,
                       fit: BoxFit.cover,
@@ -94,7 +97,7 @@ class _UpcomingMoviesState extends State<UpcomingMovies> {
               bottom: 20.0,
               child: Text(
                 movie.title,
-                overflow: TextOverflow.fade,
+                overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 style: TextStyle(
                     fontSize: 20,

@@ -75,4 +75,13 @@ class DatabaseService {
 
     return imgUrl;
   }
+
+  Future<String> getSchedule() async {
+    String imgUrl = await FirebaseStorage.instance
+        .ref()
+        .child("FB_IMG_1607457290285.jpg")
+        .getDownloadURL();
+
+    return imgUrl;
+  }
 }

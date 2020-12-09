@@ -43,10 +43,10 @@ class _MovieScreenState extends State<MovieScreen> {
                   child: Text(
                     '${widget.movie.title}',
                     style: TextStyle(
-                        letterSpacing: 1,
+                        letterSpacing: 4,
                         color: Colors.white,
                         fontSize: 30,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         shadows: [
                           Shadow(
                               blurRadius: 10,

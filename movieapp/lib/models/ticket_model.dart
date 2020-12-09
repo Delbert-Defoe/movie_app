@@ -324,7 +324,7 @@ class TicketModel extends ChangeNotifier {
     final ticket = new Ticket();
 
     ticket.uid = await _auth.getCurrentUser();
-    ticket.userName = UserModel().user.username;
+    ticket.userName = LocalUser().username;
     ticket.type = type[typeIndex];
     ticket.confirmed = true;
     ticket.dateTime =
