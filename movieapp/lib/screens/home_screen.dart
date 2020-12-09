@@ -43,16 +43,29 @@ class HomeScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('This Week',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        letterSpacing: 1.5,
-                        fontWeight: FontWeight.bold)),
+                TweenAnimationBuilder(
+                    duration: Duration(milliseconds: 1500),
+                    tween: Tween<double>(begin: 0, end: 1),
+                    curve: Curves.easeIn,
+                    child: Text('This Week',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.bold)),
+                    builder: (context, _tween, child) {
+                      return Transform.translate(
+                        offset: Offset(100 - _tween * 100, 0),
+                        child: Opacity(
+                          opacity: _tween,
+                          child: child,
+                        ),
+                      );
+                    }),
                 FlatButton(
                   onPressed: () => _showBottomModalSheet(context),
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 13.0),
+                    padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       'See Schedule',
                       style: TextStyle(
@@ -77,13 +90,23 @@ class HomeScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Text(
-                  'Upcoming Movies',
-                  style: TextStyle(
-                      fontSize: 30,
-                      letterSpacing: 1.5,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                TweenAnimationBuilder(
+                  duration: Duration(milliseconds: 1500),
+                  tween: Tween<double>(begin: 0, end: 1),
+                  child: Text(
+                    'Upcoming Movies',
+                    style: TextStyle(
+                        fontSize: 30,
+                        letterSpacing: 1.5,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  builder: (context, _tween, child) {
+                    return Transform.translate(
+                      offset: Offset(100 - _tween * 100, 0),
+                      child: Opacity(opacity: _tween, child: child),
+                    );
+                  },
                 ),
               ],
             ),
@@ -121,16 +144,16 @@ class HomeScreen extends StatelessWidget {
                           style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontSize: 25,
-                              fontWeight: FontWeight.w600)),
+                              fontWeight: FontWeight.bold)),
                     ),
                   ),
-                  Divider(
-                    thickness: 1,
-                    color: Colors.grey,
-                    indent: 20,
-                    endIndent: 20,
-                    height: 10,
-                  ),
+                  // Divider(
+                  //   thickness: 1,
+                  //   color: Colors.grey,
+                  //   indent: 20,
+                  //   endIndent: 20,
+                  //   height: 10,
+                  // ),
                   Flexible(
                     flex: 8,
                     child: FutureBuilder(
