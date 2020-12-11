@@ -42,12 +42,7 @@ class _SnacksScreenState extends State<SnacksScreen> {
     var itemProvider = Provider.of<ItemProvider>(context);
     itemProvider.getItems();
 
-    if (itemProvider.items == null) {
-      setState(() {
-        changeContainerColor();
-        changeContainerColor();
-      });
-    }
+    if (itemProvider.items == null) {}
 
     return Scaffold(
         appBar: AppBar(
