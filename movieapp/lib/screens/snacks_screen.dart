@@ -40,9 +40,13 @@ class _SnacksScreenState extends State<SnacksScreen> {
   @override
   Widget build(BuildContext context) {
     var itemProvider = Provider.of<ItemProvider>(context);
-    itemProvider.getItems();
 
-    if (itemProvider.items == null) {}
+    if (itemProvider.items.length == 0) {
+      itemProvider.getItems();
+    } // If the item list is empty, it will populate the item
+    /*
+    * This function will most likely be deprecated once items are moved to the local database
+    */
 
     return Scaffold(
         appBar: AppBar(
@@ -79,103 +83,137 @@ class _SnacksScreenState extends State<SnacksScreen> {
             ])
           ],
         ),
-        body: ListView.builder(
-            padding: EdgeInsets.all(0),
-            physics: BouncingScrollPhysics(),
-            itemCount: itemProvider.items.length,
-            itemBuilder: (BuildContext context, int itemIndex) {
-              Item item = itemProvider.items[itemIndex];
-              List<bool> selections = [];
-              for (int x = 0; x < item.selections.length; x++) {
-                selections.add(item.selections[x]);
-              }
-
-              return AnimatedContainer(
-                  duration: Duration(milliseconds: 500),
-                  margin:
-                      EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
-                  padding: EdgeInsets.all(0),
-                  height: 200,
-                  width: 100,
+        body: itemProvider.items == 0
+            ? Center(
+                child: FractionallySizedBox(
+                heightFactor: 0.4,
+                widthFactor: 0.5,
+                child: Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: gradient),
                     borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey[800],
                   ),
-                  child: Row(children: <Widget>[
-                    FutureBuilder(
-                        future: DatabaseService().getItemPicture(item.imgUrl),
-                        builder: (context, AsyncSnapshot<String> snapshot) {
-                          if (!snapshot.hasData)
-                            return CircularProgressIndicator(
-                              backgroundColor: Theme.of(context).primaryColor,
-                            );
-
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: snapshot.data,
-                              height: 200,
-                              width: 100,
-                              fit: BoxFit.cover,
-                            ),
-                          );
-                        }),
-                    SizedBox(
-                      width: 20,
+                  child: Column(children: [
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text(
+                          'Fetching Items....',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      flex: 1,
                     ),
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Text(
-                            item.name,
-                            style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '\$${itemProvider.getPrice(item).toStringAsFixed(2)}',
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
-                          ),
-                          FlatButton.icon(
-                              icon: Icon(
-                                Icons.add,
-                                size: 40,
-                              ),
-                              label: Text('Add'),
-                              onPressed: () {
-                                Scaffold.of(context).showSnackBar(SnackBar(
+                    Flexible(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                            backgroundColor: Theme.of(context).primaryColor),
+                      ),
+                      flex: 4,
+                    )
+                  ]),
+                ),
+              ))
+            : ListView.builder(
+                padding: EdgeInsets.all(0),
+                physics: BouncingScrollPhysics(),
+                itemCount: itemProvider.items.length,
+                itemBuilder: (BuildContext context, int itemIndex) {
+                  Item item = itemProvider.items[itemIndex];
+                  List<bool> selections = [];
+                  for (int x = 0; x < item.selections.length; x++) {
+                    selections.add(item.selections[x]);
+                  }
+
+                  return AnimatedContainer(
+                      duration: Duration(milliseconds: 500),
+                      margin: EdgeInsets.only(
+                          top: 10, bottom: 10, left: 15, right: 15),
+                      padding: EdgeInsets.all(0),
+                      height: 200,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: gradient),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(children: <Widget>[
+                        FutureBuilder(
+                            future:
+                                DatabaseService().getItemPicture(item.imgUrl),
+                            builder: (context, AsyncSnapshot<String> snapshot) {
+                              if (!snapshot.hasData)
+                                return CircularProgressIndicator(
                                   backgroundColor:
                                       Theme.of(context).primaryColor,
-                                  content: Text(
-                                    '${item.name} Added To Cart!',
-                                    style: TextStyle(fontSize: 20),
+                                );
+
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: FadeInImage.memoryNetwork(
+                                  placeholder: kTransparentImage,
+                                  image: snapshot.data,
+                                  height: 200,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            }),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Text(
+                                item.name,
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                '\$${itemProvider.getPrice(item).toStringAsFixed(2)}',
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                              FlatButton.icon(
+                                  icon: Icon(
+                                    Icons.add,
+                                    size: 40,
                                   ),
-                                  duration: Duration(seconds: 1),
-                                ));
-                                itemProvider.addItem(item);
-                                changeContainerColor();
-                              }),
-                          ToggleButtons(
-                            children: [
-                              ...item.sizes.map((size) => itemProvider
-                                  .buildSelections(size.toString(), item))
-                            ],
-                            onPressed: (int index) {
-                              itemProvider.getSelectedButton(itemIndex, index);
-                            },
-                            //the index used below is the index provided by the listview builder
-                            isSelected: selections,
-                            fillColor: Colors.green,
-                            selectedColor: Colors.white,
-                            borderColor: Colors.grey[500],
-                          )
-                        ]),
-                  ]));
-            }));
+                                  label: Text('Add'),
+                                  onPressed: () {
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                      content: Text(
+                                        '${item.name} Added To Cart!',
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      duration: Duration(seconds: 1),
+                                    ));
+                                    itemProvider.addItem(item);
+                                    changeContainerColor();
+                                  }),
+                              ToggleButtons(
+                                children: [
+                                  ...item.sizes.map((size) => itemProvider
+                                      .buildSelections(size.toString(), item))
+                                ],
+                                onPressed: (int index) {
+                                  itemProvider.getSelectedButton(
+                                      itemIndex, index);
+                                },
+                                //the index used below is the index provided by the listview builder
+                                isSelected: selections,
+                                fillColor: Colors.green,
+                                selectedColor: Colors.white,
+                                borderColor: Colors.grey[500],
+                              )
+                            ]),
+                      ]));
+                }));
   }
 }

@@ -87,11 +87,14 @@ class ItemProvider extends ChangeNotifier {
   List<Item> items = [];
 
   //void getItems
-  void getItems() {
-    var result = DatabaseService().getItems();
-    result.map((event) => event.docs.forEach((element) {
-          items.add(Item.fromData(element.data()));
-        }));
+  void getItems() async {
+    var result = DatabaseService().itemCollection.snapshots().listen((event) {
+      event.docs.forEach((element) {
+        items.add(Item.fromData(element.data()));
+      });
+    });
+    //print('Hi : ${items.length}');
+    notifyListeners();
   }
 
   Widget buildSelections(String size, Item item) {
@@ -101,12 +104,11 @@ class ItemProvider extends ChangeNotifier {
   List<CartItem> cart = [];
 
   void addItem(Item item) {
-    final cartItem = new CartItem();
-
-    cartItem.price = getPrice(item);
-    cartItem.name = item.name;
-    cartItem.size = getSize(item);
-    cartItem.imgUrl = item.imgUrl;
+    final cartItem = new CartItem()
+      ..price = getPrice(item)
+      ..name = item.name
+      ..size = getSize(item)
+      ..imgUrl = item.imgUrl;
 
     cart.add(cartItem);
 
