@@ -119,34 +119,28 @@ class ItemProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getSelectedButton(Item item, int index) {
-    for (int x = 0; x < item.selections.length; x++) {
-      item.selections[x] = false;
+  void getSelectedButton(int itemIndex, int index) {
+    for (int x = 0; x < items[itemIndex].selections.length; x++) {
+      items[itemIndex].selections[x] = false;
     }
-    item.selections[index] = !item.selections[index];
+    items[itemIndex].selections[index] = !items[itemIndex].selections[index];
     notifyListeners();
   }
 
   String getSize(Item item) {
-    if (item.selections[0]) {
-      return 'Small';
-    } else if (item.selections[1]) {
-      return 'Medium';
-    } else if (item.selections[2]) {
-      return 'Large';
-    } else if (item.selections[3]) {
-      return 'Extra Large';
+    for (int x = 0; x < item.selections.length; x++) {
+      if (item.selections[x]) {
+        return item.prices[x];
+      }
     }
   }
 
   double getPrice(Item item) {
-    int price;
     for (int index = 0; index < item.selections.length; index++) {
-      if (item.selections[index] == true) {
-        price = item.prices[index];
+      if (item.selections[index]) {
+        return item.prices[index] / 100;
       }
     }
-    return price / 100;
   }
 
   double cartTotal() {
