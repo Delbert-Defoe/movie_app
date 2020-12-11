@@ -78,12 +78,14 @@ class _SnacksScreenState extends State<SnacksScreen> {
       body: StreamBuilder(
         stream: DatabaseService().getItems(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          print('object');
           if (!snapshot.hasData)
             return Center(
               child: SpinKitWave(
                   color: Theme.of(context).primaryColor,
                   size: MediaQuery.of(context).size.width / 5),
             );
+
           return ListView.builder(
               padding: EdgeInsets.all(0),
               physics: BouncingScrollPhysics(),
@@ -112,9 +114,8 @@ class _SnacksScreenState extends State<SnacksScreen> {
                           future: DatabaseService().getItemPicture(item.imgUrl),
                           builder: (context, AsyncSnapshot<String> snapshot) {
                             if (!snapshot.hasData)
-                              return SpinKitWave(
-                                color: Theme.of(context).primaryColor,
-                                size: 50,
+                              return CircularProgressIndicator(
+                                backgroundColor: Theme.of(context).primaryColor,
                               );
 
                             return ClipRRect(
@@ -169,11 +170,19 @@ class _SnacksScreenState extends State<SnacksScreen> {
                                 }),
                             ToggleButtons(
                               children: [
-                                ...item.selections.map((size) =>
-                                    itemProvider.buildSelections(size, item))
+                                ...item.sizes.map((size) => itemProvider
+                                    .buildSelections(size.toString(), item))
                               ],
                               onPressed: (int index) {
-                                itemProvider.getSelectedButton(item, index);
+                                setState(() {
+                                  for (int i = 0;
+                                      i < item.selections.length;
+                                      i++) {
+                                    item.selections[i] = false;
+                                  }
+                                  item.selections[index] = true;
+                                });
+                                ;
                               },
                               //the index used below is the index provided by the listview builder
                               isSelected: selections,

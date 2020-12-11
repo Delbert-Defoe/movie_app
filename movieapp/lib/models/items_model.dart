@@ -10,51 +10,33 @@ class Item {
   String name;
   String imgUrl;
   List<dynamic> prices;
-  double quantity;
   List<dynamic> selections;
-  List<dynamic> get sizes {
-    for (int i = 0; i < prices.length; i++) {
-      if (i == 0)
-        selections.add('S');
-      else if (i == 1)
-        selections.add('M');
-      else if (i == 2)
-        selections.add('L');
-      else if (i == 3) selections.add('XL');
+  List<dynamic> sizes;
 
-      return selections;
-    }
-  }
-
-  Item(
-      {this.name,
-      this.prices,
-      this.imgUrl,
-      this.quantity = 0.0,
-      this.selections});
+  Item({this.name, this.prices, this.imgUrl, this.selections, this.sizes});
 
   Map<String, dynamic> toJson() => {
         'name': name,
         'prices': prices,
-        'quantity': 0,
         'selections': selections,
-        'imgUrl': imgUrl
+        'imgUrl': imgUrl,
+        'sizes': sizes
       };
 
   Map<String, dynamic> toMap() => {
         'name': name,
         'prices': prices.toString(),
-        'quantity': 0,
         'selections': selections.toString(),
         'imgUrl': imgUrl,
+        'sizes': sizes
       };
 
   Item.fromData(Map<String, dynamic> data)
       : name = data['name'],
         prices = data['prices'],
-        quantity = data['quantity'],
         selections = data['selections'],
-        imgUrl = data['imgUrl'];
+        imgUrl = data['imgUrl'],
+        sizes = data['sizes'];
 }
 
 class CartItem {
@@ -67,49 +49,50 @@ class CartItem {
 }
 
 class ItemProvider extends ChangeNotifier {
-  /* List<Item> items = [
+  /*
+  List<Item> items = [
     Item(
-      
-      name: 'Pop Corn',
-      imgUrl: 'assets/images/popcornpic.png',
-      prices: [500, 800, 900, 1000],
-      price: 0,
-      selections: [true, false, false, false],
-    ),
+        name: 'Pop Corn',
+        imgUrl: 'popcornpic.png',
+        prices: [500, 800, 900, 1000],
+        selections: [true, false, false, false],
+        sizes: ['S', 'M', 'L', 'XL']),
     Item(
-      name: 'Burger',
-      imgUrl: 'assets/images/burger.jpg',
-      prices: [500, 800, 900],
-      price: 0,
-      selections: [true, false, false],
-    ),
+        name: 'Burger',
+        imgUrl: 'burger.jpg',
+        prices: [500, 800, 900],
+        selections: [true, false, false],
+        sizes: ['S', 'M', 'L']),
     Item(
-      name: 'Hot dog',
-      imgUrl: 'assets/images/hotdog.jpg',
-      prices: [500, 800],
-      price: 0,
-      selections: [true, false],
-    ),
+        name: 'Hot dog',
+        imgUrl: 'hotdog.jpg',
+        prices: [500, 800],
+        selections: [true, false],
+        sizes: ['S', 'M']),
     Item(
-      name: 'Sprite',
-      imgUrl: 'assets/images/sprite.jpg',
-      prices: [500, 825, 900],
-      price: 0,
-      selections: [true, false, false],
-    ),
+        name: 'Sprite',
+        imgUrl: 'sprite.jpg',
+        prices: [500, 825, 900],
+        selections: [true, false, false],
+        sizes: ['S', 'M', 'L']),
     Item(
-      name: 'Fanta',
-      imgUrl: 'assets/images/fanta.jpg',
-      prices: [500, 800, 900],
-      price: 0,
-      selections: [true, false, false],
-    )
+        name: 'Fanta',
+        imgUrl: 'fanta.jpg',
+        prices: [500, 800, 900],
+        selections: [true, false, false],
+        sizes: ['S', 'M', 'L'])
   ];
-  */
+*/
 
-  List items = [];
+  List<Item> items = [];
 
   //void getItems
+  void getItems() {
+    var result = DatabaseService().getItems();
+    result.map((event) => event.docs.forEach((element) {
+          items.add(Item.fromData(element.data()));
+        }));
+  }
 
   Widget buildSelections(String size, Item item) {
     return Text('$size');
