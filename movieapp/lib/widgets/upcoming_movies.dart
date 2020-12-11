@@ -64,47 +64,59 @@ class _UpcomingMoviesState extends State<UpcomingMovies> {
                       movie: movie,
                     )));
       },
-      child: Container(
-        margin: EdgeInsets.only(left: 20.0, top: 5.0, bottom: 5.0),
-        width: 220,
-        child: Stack(children: <Widget>[
-          FutureBuilder(
-              future: DatabaseService().getPicture(movie.imageUrl),
-              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                if (!snapshot.hasData)
-                  return SpinKitWave(
-                    size: 50,
-                    color: Theme.of(context).primaryColor,
-                  );
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Hero(
-                    tag: movie.imageUrl,
-                    child: CachedNetworkImage(
-                      placeholder: (context, url) => CircularProgressIndicator(
-                        backgroundColor: Theme.of(context).primaryColor,
+      child: TweenAnimationBuilder(
+        duration: Duration(milliseconds: 500),
+        tween: Tween<double>(begin: 0, end: 1),
+        child: Container(
+          margin: EdgeInsets.only(left: 20.0, top: 5.0, bottom: 5.0),
+          width: 220,
+          child: Stack(children: <Widget>[
+            FutureBuilder(
+                future: DatabaseService().getPicture(movie.imageUrl),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (!snapshot.hasData)
+                    return SpinKitWave(
+                      size: 50,
+                      color: Theme.of(context).primaryColor,
+                    );
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Hero(
+                      tag: movie.imageUrl,
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(
+                          backgroundColor: Theme.of(context).primaryColor,
+                        ),
+                        imageUrl: snapshot.data,
+                        height: 300,
+                        width: 220,
+                        fit: BoxFit.cover,
                       ),
-                      imageUrl: snapshot.data,
-                      height: 300,
-                      width: 220,
-                      fit: BoxFit.cover,
                     ),
-                  ),
-                );
-              }),
-          Positioned(
-              left: 5.0,
-              bottom: 20.0,
-              child: Text(
-                movie.title,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white),
-              ))
-        ]),
+                  );
+                }),
+            Positioned(
+                left: 5.0,
+                bottom: 20.0,
+                child: Text(
+                  movie.title,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white),
+                ))
+          ]),
+        ),
+        builder: (context, _tween, _child) {
+          return Transform.translate(
+            offset: Offset(_tween - 20, 0),
+            child: Transform.scale(scale: _tween, child: _child),
+          );
+        },
       ),
     );
   }
