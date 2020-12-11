@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:movieapp/services/authentication.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:movieapp/models/movies_model.dart';
 
 class DatabaseService {
   final String uid;

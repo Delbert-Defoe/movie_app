@@ -33,21 +33,29 @@ class _UpcomingMoviesState extends State<UpcomingMovies> {
               return SpinKitWave(
                   color: Theme.of(context).primaryColor,
                   size: MediaQuery.of(context).size.width / 5);
+
             return ListView.builder(
                 physics: BouncingScrollPhysics(),
                 //padding: EdgeInsets.all(5.0),
                 scrollDirection: Axis.horizontal,
                 reverse: true,
                 itemCount: snapshot.data.docs.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    buildMovieWidget(context, snapshot.data.docs[index]));
+                itemBuilder: (BuildContext context, int index) {
+                  Movie movie =
+                      Movie.fromData(snapshot.data.docs[index].data());
+                  DatabaseService().getPicture(movie.imageUrl).then((value) {
+                    movie.imageUrl = value;
+                    buildMovieWidget(context, movie);
+                  });
+                });
           }),
     );
   }
 
-  Widget buildMovieWidget(
-      BuildContext context, DocumentSnapshot movieSnapshot) {
-    Movie movie = Movie.fromData(movieSnapshot.data());
+  Widget buildMovieWidget(BuildContext context, Movie movie) {
+    // Movie movie = Movie.fromData(movieSnapshot.data());
+    print('running');
+    print(movie.title);
     return GestureDetector(
       onTap: () {
         //  Navigator.push(
@@ -56,7 +64,6 @@ class _UpcomingMoviesState extends State<UpcomingMovies> {
         //          widget: MovieScreen(
         //        movie: movie,
         //      )));
-
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -68,35 +75,25 @@ class _UpcomingMoviesState extends State<UpcomingMovies> {
         duration: Duration(milliseconds: 500),
         tween: Tween<double>(begin: 0, end: 1),
         child: Container(
+          color: Colors.grey,
           margin: EdgeInsets.only(left: 20.0, top: 5.0, bottom: 5.0),
           width: 220,
           child: Stack(children: <Widget>[
-            FutureBuilder(
-                future: DatabaseService().getPicture(movie.imageUrl),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (!snapshot.hasData)
-                    return SpinKitWave(
-                      size: 50,
-                      color: Theme.of(context).primaryColor,
-                    );
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Hero(
-                      tag: movie.imageUrl,
-                      child: CachedNetworkImage(
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(
-                          backgroundColor: Theme.of(context).primaryColor,
-                        ),
-                        imageUrl: snapshot.data,
-                        height: 300,
-                        width: 220,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                }),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Hero(
+                tag: movie.imageUrl,
+                child: CachedNetworkImage(
+                  placeholder: (context, url) => CircularProgressIndicator(
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                  imageUrl: movie.imageUrl,
+                  height: 300,
+                  width: 220,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             Positioned(
                 left: 5.0,
                 bottom: 20.0,
