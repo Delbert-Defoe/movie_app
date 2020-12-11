@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movieapp/models/items_model.dart';
 import 'package:movieapp/services/authentication.dart';
+import 'package:movieapp/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -72,9 +74,12 @@ class CartScreen extends StatelessWidget {
                 return Column(
                   children: [
                     ListTile(
-                      leading: FadeInImage.memoryNetwork(
-                        placeholder: kTransparentImage,
-                        image: item.imgUrl,
+                      leading: CachedNetworkImage(
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(
+                          backgroundColor: Theme.of(context).primaryColor,
+                        ),
+                        imageUrl: item.imgUrl,
                         height: 200,
                         width: 100,
                         fit: BoxFit.cover,
