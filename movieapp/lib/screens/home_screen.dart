@@ -44,7 +44,7 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TweenAnimationBuilder(
-                    duration: Duration(milliseconds: 1500),
+                    duration: Duration(milliseconds: 500),
                     tween: Tween<double>(begin: 0, end: 1),
                     curve: Curves.easeIn,
                     child: Text('This Week',
@@ -91,7 +91,7 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 TweenAnimationBuilder(
-                  duration: Duration(milliseconds: 1500),
+                  duration: Duration(milliseconds: 500),
                   tween: Tween<double>(begin: 0, end: 1),
                   child: Text(
                     'Upcoming Movies',
@@ -103,7 +103,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   builder: (context, _tween, child) {
                     return Transform.translate(
-                      offset: Offset(100 - _tween * 100, 0),
+                      offset: Offset(-100 + _tween * 100, 0),
                       child: Opacity(opacity: _tween, child: child),
                     );
                   },

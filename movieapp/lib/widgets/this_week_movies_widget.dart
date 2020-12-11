@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -63,43 +64,58 @@ class _WeeklyMoviesState extends State<WeeklyMovies> {
                       movie: movie,
                     )));
       },
-      child: Container(
-        margin: EdgeInsets.only(left: 20.0, top: 5.0, bottom: 5.0),
-        width: 220,
-        child: Stack(children: <Widget>[
-          FutureBuilder(
-              future: DatabaseService().getPicture(movie.imageUrl),
-              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                if (!snapshot.hasData)
-                  return SpinKitWave(
-                    size: 50,
-                    color: Theme.of(context).primaryColor,
-                  );
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Hero(
-                    tag: movie.imageUrl,
-                    child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: snapshot.data,
-                      height: 300,
-                      width: 220,
-                      fit: BoxFit.cover,
+      child: TweenAnimationBuilder(
+        duration: Duration(milliseconds: 500),
+        tween: Tween<double>(begin: 1, end: 0),
+        curve: Curves.bounceIn,
+        child: Container(
+          margin: EdgeInsets.only(left: 20.0, top: 5.0, bottom: 5.0),
+          width: 220,
+          child: Stack(children: <Widget>[
+            FutureBuilder(
+                future: DatabaseService().getPicture(movie.imageUrl),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (!snapshot.hasData)
+                    return SpinKitWave(
+                      size: 50,
+                      color: Theme.of(context).primaryColor,
+                    );
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Hero(
+                      tag: movie.imageUrl,
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(
+                          backgroundColor: Theme.of(context).primaryColor,
+                        ),
+                        imageUrl: snapshot.data,
+                        height: 300,
+                        width: 220,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-                );
-              }),
-          Positioned(
-              left: 5.0,
-              bottom: 20.0,
-              child: Text(
-                movie.title,
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white),
-              ))
-        ]),
+                  );
+                }),
+            Positioned(
+                left: 5.0,
+                bottom: 20.0,
+                child: Text(
+                  movie.title,
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white),
+                ))
+          ]),
+        ),
+        builder: (context, _tween, child) {
+          return Transform.translate(
+            offset: Offset(_tween * 100, 0),
+            child: Transform.scale(scale: 1 - _tween, child: child),
+          );
+        },
       ),
     );
   }

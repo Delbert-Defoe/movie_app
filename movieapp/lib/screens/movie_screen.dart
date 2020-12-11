@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movieapp/models/movies_model.dart';
 import 'package:movieapp/services/database.dart';
@@ -78,9 +79,10 @@ class _MovieScreenState extends State<MovieScreen> {
                           child: Stack(children: <Widget>[
                         Hero(
                           tag: widget.movie.imageUrl,
-                          child: FadeInImage.memoryNetwork(
-                            placeholder: kTransparentImage,
-                            image: snapshot.data,
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            imageUrl: snapshot.data,
                             height: imgheight,
                             width: devWidth,
                             fit: BoxFit.cover,
