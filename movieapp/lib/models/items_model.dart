@@ -84,71 +84,74 @@ class ItemProvider extends ChangeNotifier {
   ];
 */
 
+//Lists to be used in the provider
   List<Item> items = [];
+  List<CartItem> cart = [];
 
-  //void getItems
-  void getItems() {
-    var result = DatabaseService().getItems();
-    result.map((event) => event.docs.forEach((element) {
-          items.add(Item.fromData(element.data()));
-        }));
+  //Retrieve Items from the database
+  void getItems() async {
+    var result = DatabaseService().itemCollection.snapshots().listen((event) {
+      event.docs.forEach((element) {
+        items.add(Item.fromData(element.data()));
+      });
+    }).onError(() => print('Error Fetching Items'));
+
+    notifyListeners();
   }
 
+  //Build Selections for the ToggleButtons widget
   Widget buildSelections(String size, Item item) {
     return Text('$size');
   }
 
-  List<CartItem> cart = [];
-
+  //Add an item to cart
   void addItem(Item item) {
-    final cartItem = new CartItem();
-
-    cartItem.price = getPrice(item);
-    cartItem.name = item.name;
-    cartItem.size = getSize(item);
-    cartItem.imgUrl = item.imgUrl;
+    final cartItem = new CartItem()
+      ..price = getPrice(item)
+      ..name = item.name
+      ..size = getSize(item)
+      ..imgUrl = item.imgUrl;
 
     cart.add(cartItem);
 
     notifyListeners();
   }
 
+//Remove an item from cart
   void removeItem(int index) {
     cart.removeAt(index);
 
     notifyListeners();
   }
 
-  void getSelectedButton(Item item, int index) {
-    for (int x = 0; x < item.selections.length; x++) {
-      item.selections[x] = false;
+//Get selected button from the
+  void getSelectedButton(int itemIndex, int index) {
+    for (int x = 0; x < items[itemIndex].selections.length; x++) {
+      items[itemIndex].selections[x] = false;
     }
-    item.selections[index] = !item.selections[index];
+    items[itemIndex].selections[index] = !items[itemIndex].selections[index];
     notifyListeners();
   }
 
+//Get the selected size for the CartItem object
   String getSize(Item item) {
-    if (item.selections[0]) {
-      return 'Small';
-    } else if (item.selections[1]) {
-      return 'Medium';
-    } else if (item.selections[2]) {
-      return 'Large';
-    } else if (item.selections[3]) {
-      return 'Extra Large';
-    }
-  }
-
-  double getPrice(Item item) {
-    int price;
-    for (int index = 0; index < item.selections.length; index++) {
-      if (item.selections[index] == true) {
-        price = item.prices[index];
+    for (int x = 0; x < item.selections.length; x++) {
+      if (item.selections[x]) {
+        return item.prices[x];
       }
     }
-    return price / 100;
   }
 
+//Get the selected Price from the size for the CartItem object
+  double getPrice(Item item) {
+    for (int index = 0; index < item.selections.length; index++) {
+      if (item.selections[index]) {
+        return item.prices[index] / 100;
+      }
+    }
+  }
+
+//Calculate the total price of everything in the cart
   double cartTotal() {
     double total = 0;
     for (int index = 0; index < cart.length; index++) {
@@ -157,6 +160,7 @@ class ItemProvider extends ChangeNotifier {
     return total;
   }
 
+//Purchasing items alert dialog
   void purchaseItems(BuildContext context) {
     var alertDialog = AlertDialog(
       title: Text('Item Purcahse'),
