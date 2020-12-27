@@ -85,8 +85,8 @@ class ItemProvider extends ChangeNotifier {
 */
 
 //Lists to be used in the provider
-  List<Item> items = [];
-  List<CartItem> cart = [];
+  var items = <Item>[];
+  var cart = <CartItem>[];
 
   //Retrieve Items from the database
   void getItems() async {
@@ -113,7 +113,7 @@ class ItemProvider extends ChangeNotifier {
       ..imgUrl = item.imgUrl;
 
     cart.add(cartItem);
-
+    print(cart);
     notifyListeners();
   }
 
