@@ -23,9 +23,9 @@ void main() async {
     ChangeNotifierProvider(
       create: (context) => ItemProvider(),
     ),
-    ChangeNotifierProvider(
-      create: (context) => LocalUser(),
-    )
+    // ChangeNotifierProvider(
+    //   create: (context) => LocalUser(),
+    // )
   ], child: MyApp()));
 }
 

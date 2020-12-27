@@ -85,8 +85,8 @@ class ItemProvider extends ChangeNotifier {
 */
 
 //Lists to be used in the provider
-  List<Item> items = [];
-  List<CartItem> cart = [];
+  var items = <Item>[];
+  var cart = <CartItem>[];
 
   //Retrieve Items from the database
   void getItems() async {
@@ -94,9 +94,8 @@ class ItemProvider extends ChangeNotifier {
       event.docs.forEach((element) {
         items.add(Item.fromData(element.data()));
       });
+      notifyListeners();
     }).onError(() => print('Error Fetching Items'));
-
-    notifyListeners();
   }
 
   //Build Selections for the ToggleButtons widget

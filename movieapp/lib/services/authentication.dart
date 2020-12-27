@@ -47,11 +47,11 @@ class AuthService {
               }
           });
 
-      return LocalUser(
-          uid: user.uid,
-          username: username,
-          preferences: preferences,
-          points: points);
+      return LocalUser()
+        ..uid = uid
+        ..username = username
+        ..points = points
+        ..preferences = preferences;
     } else if (user == null) {
       return null;
     }
