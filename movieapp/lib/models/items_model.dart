@@ -94,9 +94,8 @@ class ItemProvider extends ChangeNotifier {
       event.docs.forEach((element) {
         items.add(Item.fromData(element.data()));
       });
+      notifyListeners();
     }).onError(() => print('Error Fetching Items'));
-
-    notifyListeners();
   }
 
   //Build Selections for the ToggleButtons widget

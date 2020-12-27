@@ -4,24 +4,20 @@ import 'package:movieapp/services/authentication.dart';
 import 'package:movieapp/services/database.dart';
 import 'package:flutter/material.dart';
 
-class LocalUser extends ChangeNotifier {
+class LocalUser {
   String uid;
   String username;
   String role;
   List<dynamic> preferences;
   int points;
 
-  LocalUser._privateConstructor();
-  static final LocalUser instance = LocalUser._privateConstructor();
+  LocalUser._internal();
+  static final LocalUser instance = LocalUser._internal();
 
-  LocalUser get user {
-    if (user != null) {
-      return user;
-    }
+  factory LocalUser() {
+    if (instance == null) {}
+    return instance;
   }
-
-  LocalUser(
-      {this.uid, this.preferences, this.username, this.role, this.points});
 
   // LocalUser.fromData(Map<String, dynamic> data)
   //     : uid = data['id'],

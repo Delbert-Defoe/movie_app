@@ -41,7 +41,7 @@ class _SnacksScreenState extends State<SnacksScreen> {
   Widget build(BuildContext context) {
     var itemProvider = Provider.of<ItemProvider>(context);
 
-    if (itemProvider.items.length == 0) {
+    if (itemProvider.items.isEmpty) {
       itemProvider.getItems();
     } // If the item list is empty, it will populate the item
     /*
