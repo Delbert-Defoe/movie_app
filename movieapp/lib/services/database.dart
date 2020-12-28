@@ -4,9 +4,9 @@ import 'package:movieapp/services/authentication.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class DatabaseService {
-  final String uid;
+  String get uid {}
 
-  DatabaseService({this.uid});
+  DatabaseService();
 
 //collection references
 

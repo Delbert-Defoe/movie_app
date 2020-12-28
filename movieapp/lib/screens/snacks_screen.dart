@@ -178,25 +178,28 @@ class _SnacksScreenState extends State<SnacksScreen> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20),
                               ),
-                              FlatButton.icon(
-                                  icon: Icon(
-                                    Icons.add,
-                                    size: 40,
-                                  ),
-                                  label: Text('Add'),
-                                  onPressed: () {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                      backgroundColor:
-                                          Theme.of(context).primaryColor,
-                                      content: Text(
-                                        '${item.name} Added To Cart!',
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      duration: Duration(seconds: 1),
-                                    ));
-                                    itemProvider.addItem(item);
-                                    changeContainerColor();
-                                  }),
+                              InkWell(
+                                child: FlatButton.icon(
+                                    icon: Icon(
+                                      Icons.add,
+                                      size: 30,
+                                    ),
+                                    label: Text('Add'),
+                                    onPressed: () {
+                                      Scaffold.of(context)
+                                          .showSnackBar(SnackBar(
+                                        backgroundColor:
+                                            Theme.of(context).primaryColor,
+                                        content: Text(
+                                          '${item.name} Added To Cart!',
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                        duration: Duration(seconds: 1),
+                                      ));
+
+                                      itemProvider.addItem(item);
+                                    }),
+                              ),
                               ToggleButtons(
                                 children: [
                                   ...item.sizes.map((size) => itemProvider

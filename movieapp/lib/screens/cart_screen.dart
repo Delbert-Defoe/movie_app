@@ -73,38 +73,51 @@ class CartScreen extends StatelessWidget {
                 var item = itemProvider.cart[index];
                 return Column(
                   children: [
-                    ListTile(
-                      leading: CachedNetworkImage(
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(
-                          backgroundColor: Theme.of(context).primaryColor,
-                        ),
-                        imageUrl: item.imgUrl,
-                        height: 200,
-                        width: 100,
-                        fit: BoxFit.cover,
-                      ),
-                      title: Text(item.name,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
-                              fontWeight: FontWeight.w600)),
-                      subtitle: Text(
-                        '${item.size}: \$${item.price.toStringAsFixed(2)}',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                      trailing: IconButton(
-                        icon: Icon(
-                          Icons.delete,
-                          color: Theme.of(context).primaryColor,
-                          size: 30,
-                        ),
-                        onPressed: () {
-                          itemProvider.removeItem(index);
-                          // _removeItem(index, context);
-                        },
-                      ),
-                    ),
+                    FutureBuilder(
+                        future: DatabaseService().getItemPicture(item.imgUrl),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData)
+                            return CircularProgressIndicator(
+                              backgroundColor: Theme.of(context).primaryColor,
+                            );
+                          return ListTile(
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: CachedNetworkImage(
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                ),
+                                imageUrl: snapshot.data,
+                                height: 200,
+                                width: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            title: Text(item.name,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w600)),
+                            subtitle: Text(
+                              '${item.size}: \$${item.price.toStringAsFixed(2)}',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.delete,
+                                color: Theme.of(context).primaryColor,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                itemProvider.removeItem(index);
+                                // _removeItem(index, context);
+                              },
+                            ),
+                          );
+                        }),
                     Divider(
                       color: Colors.white,
                       indent: devWidth * 0.12152777777777777440200617283951,
