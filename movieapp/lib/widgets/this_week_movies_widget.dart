@@ -113,7 +113,11 @@ class _WeeklyMoviesState extends State<WeeklyMovies> {
         builder: (context, _tween, child) {
           return Transform.translate(
             offset: Offset(_tween * 100, 0),
-            child: Transform.scale(scale: 1 - _tween, child: child),
+            child: Transform.scale(
+              scale: 1 - _tween,
+              child: child,
+              alignment: Alignment.center,
+            ),
           );
         },
       ),

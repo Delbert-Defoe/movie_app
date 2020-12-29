@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:square_in_app_payments/models.dart';
 import 'package:square_in_app_payments/in_app_payments.dart';
 
@@ -11,9 +12,9 @@ class Item {
   String id;
   String name;
   String imgUrl;
-  List<dynamic> prices;
-  List<dynamic> selections;
-  List<dynamic> sizes;
+  List<int> prices;
+  List<bool> selections;
+  List<String> sizes;
 
   Item(
       {@required this.id,
@@ -44,10 +45,10 @@ class Item {
   Item.fromData(Map<String, dynamic> data)
       : id = data['id'],
         name = data['name'],
-        prices = data['prices'],
-        selections = data['selections'],
+        prices = List<int>.from(data['prices']),
+        selections = List<bool>.from(data['selections']),
         imgUrl = data['imgUrl'],
-        sizes = data['sizes'];
+        sizes = List<String>.from(data['sizes']);
 }
 
 class CartItem {
@@ -126,19 +127,25 @@ class ItemProvider extends ChangeNotifier {
   //Retrieve Cart
 
   //Build Selections for the ToggleButtons widget
-  Widget buildSelections(String size, Item item) {
+  Widget buildSelections(String size) {
     return Text('$size');
   }
 
   //Add an item to cart in database
   void addItem(Item item) {
-    cart.add(CartItem()
+    cart.add(toCartItem(item));
+    notifyListeners();
+  }
+
+  CartItem toCartItem(Item item) {
+    var cartItem = CartItem()
       ..id = item.id
       ..name = item.name
       ..price = getPrice(item)
       ..size = getSize(item)
-      ..imgUrl = item.imgUrl);
-    notifyListeners();
+      ..imgUrl = item.imgUrl;
+
+    return cartItem;
   }
 
 //Remove an item from cart

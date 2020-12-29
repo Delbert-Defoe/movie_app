@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
         title: 'EmeraldMovies',
-        debugShowCheckedModeBanner: true,
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.black,
           primaryColor: Color(0xFF00660D),

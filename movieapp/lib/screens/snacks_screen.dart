@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/rendering.dart';
 import 'package:movieapp/services/database.dart';
+import 'package:movieapp/widgets/item_card.dart';
+import 'package:path/path.dart';
+import 'package:transparent_image/transparent_image.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 import '../screens/cart_screen.dart';
-import 'package:flutter/material.dart';
 import '../models/items_model.dart';
-import 'package:provider/provider.dart';
-import '../screens/testCartScreen.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:transparent_image/transparent_image.dart';
+import '../configurations/textStyles.dart';
 
 class SnacksScreen extends StatefulWidget {
   @override
@@ -40,6 +42,7 @@ class _SnacksScreenState extends State<SnacksScreen> {
   @override
   Widget build(BuildContext context) {
     var itemProvider = Provider.of<ItemProvider>(context);
+    var styles = TextStyles();
 
     if (itemProvider.items.isEmpty) {
       itemProvider.getItems();
@@ -58,32 +61,10 @@ class _SnacksScreenState extends State<SnacksScreen> {
               Navigator.pop(context);
             },
           ),
-          title: Text('Snacks', style: TextStyle(color: Colors.black)),
-          actions: <Widget>[
-            Stack(fit: StackFit.loose, children: [
-              IconButton(
-                icon: Icon(Icons.shopping_cart),
-                iconSize: 35,
-                color: Colors.black,
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => CartScreen()));
-                },
-              ),
-              itemProvider.cart.length != 0
-                  ? Positioned(
-                      top: 0,
-                      left: 5,
-                      child: Text(
-                        itemProvider.cart.length.toString(),
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                    )
-                  : Text('')
-            ])
-          ],
+          title: Text('Snacks', style: TextStyles.pagetitle),
+          actions: <Widget>[_CartIcon()],
         ),
-        body: itemProvider.items == 0
+        body: itemProvider.items.isEmpty
             ? Center(
                 child: FractionallySizedBox(
                 heightFactor: 0.4,
@@ -120,11 +101,11 @@ class _SnacksScreenState extends State<SnacksScreen> {
                 itemCount: itemProvider.items.length,
                 itemBuilder: (BuildContext context, int itemIndex) {
                   Item item = itemProvider.items[itemIndex];
-                  List<bool> selections = [];
-                  for (int x = 0; x < item.selections.length; x++) {
-                    selections.add(item.selections[x]);
-                  }
-
+                  return ItemCard(
+                    item: item,
+                    itemIndex: itemIndex,
+                  );
+/*
                   return AnimatedContainer(
                       duration: Duration(milliseconds: 500),
                       margin: EdgeInsets.only(
@@ -166,17 +147,11 @@ class _SnacksScreenState extends State<SnacksScreen> {
                             children: <Widget>[
                               Text(
                                 item.name,
-                                style: TextStyle(
-                                    fontSize: 30,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyles.itemtitle,
                               ),
                               Text(
                                 '\$${itemProvider.getPrice(item).toStringAsFixed(2)}',
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
+                                style: TextStyles.prices,
                               ),
                               InkWell(
                                 child: FlatButton.icon(
@@ -203,20 +178,62 @@ class _SnacksScreenState extends State<SnacksScreen> {
                               ToggleButtons(
                                 children: [
                                   ...item.sizes.map((size) => itemProvider
-                                      .buildSelections(size.toString(), item))
+                                      .buildSelections(size.toString()))
                                 ],
                                 onPressed: (int index) {
                                   itemProvider.getSelectedButton(
                                       itemIndex, index);
                                 },
                                 //the index used below is the index provided by the listview builder
-                                isSelected: selections,
+                                isSelected: item.selections,
                                 fillColor: Colors.green,
                                 selectedColor: Colors.white,
                                 borderColor: Colors.grey[500],
                               )
                             ]),
                       ]));
+                */
                 }));
+  }
+}
+
+class _CartIcon extends StatelessWidget {
+  double cartIndicatorSize = 10;
+
+  @override
+  Widget build(BuildContext context) {
+    var itemProvider = Provider.of<ItemProvider>(context);
+
+    return FlatButton(
+      color: Colors.transparent,
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => CartScreen()));
+      },
+      child: Stack(
+        fit: StackFit.loose,
+        children: [
+          Icon(
+            Icons.shopping_cart,
+            size: 35,
+            color: Colors.black,
+          ),
+          itemProvider.cart.isEmpty
+              ? Container(
+                  height: 0,
+                  width: 0,
+                )
+              : Positioned(
+                  right: 0,
+                  top: 0,
+                  child: Container(
+                    height: cartIndicatorSize,
+                    width: cartIndicatorSize,
+                    decoration: BoxDecoration(
+                        color: Colors.red, shape: BoxShape.circle),
+                  ))
+        ],
+      ),
+    );
   }
 }
