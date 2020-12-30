@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:movieapp/configurations/textStyles.dart';
 import 'package:movieapp/models/items_model.dart';
 import 'package:movieapp/services/authentication.dart';
 import 'package:movieapp/services/database.dart';
@@ -26,8 +27,8 @@ class CartScreen extends StatelessWidget {
           },
         ),
         title: Text(
-          'Snacks Cart',
-          style: TextStyle(color: Colors.black),
+          '🛒 Cart',
+          style: TextStyles.pagetitle,
         ),
       ),
       body: itemProvider.cart.length < 1
@@ -46,7 +47,10 @@ class CartScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Cart Empty',
-                      style: TextStyle(color: Colors.white, fontSize: 30),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontFamily: 'Raleway'),
                     ),
                     SizedBox(height: 20),
                     RaisedButton(
@@ -58,7 +62,7 @@ class CartScreen extends StatelessWidget {
                       child: Text(
                         'Buy Food!',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
                       ),
                       onPressed: () {
                         Navigator.pop(context);
@@ -128,42 +132,54 @@ class CartScreen extends StatelessWidget {
                   ],
                 );
               }),
-      bottomNavigationBar: new Container(
-          color: Theme.of(context).primaryColor,
-          height: 70,
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Total : \$ ${itemProvider.cartTotal().toStringAsFixed(2)}',
-                style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.green[100],
-                    letterSpacing: 2),
-              ),
-              RaisedButton(
-                elevation: 6,
-                child: Text(
-                  'Purchase',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: itemProvider.cartTotal() == 0
-                          ? Colors.black
-                          : Colors.white),
-                ),
-                onPressed: () {
-                  itemProvider.purchaseItems(context);
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                color: Colors.green[500],
-                padding: EdgeInsets.all(15),
-              )
-            ],
-          )),
+      bottomNavigationBar: _BottomNav(),
     );
+  }
+}
+
+class _BottomNav extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var itemProvider = Provider.of<ItemProvider>(context);
+    var height = kBottomNavigationBarHeight * 1.1;
+    return Container(
+        color: Theme.of(context).primaryColor,
+        height: height,
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Total : \$ ${itemProvider.cartTotal().toStringAsFixed(2)}',
+              style: TextStyle(
+                  fontSize: 25,
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'Raleway',
+                  fontWeight: FontWeight.w300,
+                  color: Colors.white,
+                  letterSpacing: 2),
+            ),
+            RaisedButton(
+              elevation: 6,
+              child: Text(
+                'Purchase',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Raleway',
+                    fontWeight: FontWeight.w600,
+                    color: itemProvider.cartTotal() == 0
+                        ? Colors.black
+                        : Colors.white),
+              ),
+              onPressed: () {
+                itemProvider.purchaseItems(context);
+              },
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              color: Colors.green[500],
+              padding: EdgeInsets.all(15),
+            )
+          ],
+        ));
   }
 }

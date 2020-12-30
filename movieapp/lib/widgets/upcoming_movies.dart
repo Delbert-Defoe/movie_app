@@ -38,7 +38,7 @@ class _UpcomingMoviesState extends State<UpcomingMovies> {
                 //padding: EdgeInsets.all(5.0),
                 scrollDirection: Axis.horizontal,
                 reverse: true,
-                // itemCount: snapshot.data.docs.length,
+                itemCount: snapshot.data.docs.length,
                 itemBuilder: (BuildContext context, int index) =>
                     buildMovieWidget(context, snapshot.data.docs[index]));
           }),

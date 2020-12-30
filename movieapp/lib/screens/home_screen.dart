@@ -147,13 +147,6 @@ class HomeScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold)),
                     ),
                   ),
-                  // Divider(
-                  //   thickness: 1,
-                  //   color: Colors.grey,
-                  //   indent: 20,
-                  //   endIndent: 20,
-                  //   height: 10,
-                  // ),
                   Flexible(
                     flex: 8,
                     child: FutureBuilder(

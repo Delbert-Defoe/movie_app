@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movieapp/configurations/textStyles.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sqflite/sqflite.dart';
@@ -115,20 +116,26 @@ class ItemProvider extends ChangeNotifier {
   var cart = <CartItem>[];
 
   //Retrieve Items from the database
+  //TODO: Add order by filter on itemcollection
   void getItems() async {
     var result = DatabaseService().itemCollection.snapshots().listen((event) {
-      event.docs.forEach((element) {
-        items.add(Item.fromData(element.data()));
-      });
+      if (items.isEmpty) {
+        event.docs.forEach((element) {
+          items.add(Item.fromData(element.data()));
+        });
+      } else {
+        items.replaceRange(0, items.length,
+            List<Item>.from(event.docs.map((e) => Item.fromData(e.data()))));
+      }
       notifyListeners();
-    }).onError(() => print('Error Fetching Items'));
+    }).onError((err) => print('Error Fetching Items $err'));
   }
 
   //Retrieve Cart
 
   //Build Selections for the ToggleButtons widget
   Widget buildSelections(String size) {
-    return Text('$size');
+    return Text('$size', style: TextStyles.label);
   }
 
   //Add an item to cart in database

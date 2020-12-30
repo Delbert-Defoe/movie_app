@@ -10,7 +10,7 @@ class ItemCard extends StatelessWidget {
   Item item;
   int itemIndex;
 
-  ItemCard({@required this.item, @required itemIndex});
+  ItemCard({this.item, itemIndex});
 
   final List<Color> _gradient = [
     Colors.green[800],
@@ -78,14 +78,11 @@ class ItemCard extends StatelessWidget {
                             icon: Icon(Icons.add),
                             label: Text('Add To Cart'),
                             onPressed: () {
-                              //itemProvider.addItem(item);
+                              itemProvider.addItem(item);
                               _itemSnackbar(item, context);
                             }),
                       ),
-                      _ToggleButtonWidget(
-                        item: item,
-                        itemIndex: itemIndex,
-                      ),
+                      _toggleButtons(context, itemIndex, item)
                     ]),
               ))
         ]),
@@ -110,7 +107,7 @@ void _itemSnackbar(Item item, BuildContext context) {
       width: double.infinity,
       alignment: Alignment.center,
       child: Text(
-        '${item.name} Added To Cart!  🛒',
+        ' + ${item.name} Added To Cart !  🛒',
         style: TextStyles.snackbartitle,
       ),
     ),
@@ -118,20 +115,10 @@ void _itemSnackbar(Item item, BuildContext context) {
   ));
 }
 
-class _ToggleButtonWidget extends StatelessWidget {
-  Item item;
-  int itemIndex;
-
-  _ToggleButtonWidget({@required this.item, @required this.itemIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    var itemProvider = Provider.of<ItemProvider>(context);
+Widget _toggleButtons(BuildContext context, int itemIndex, Item item) {
+  return Consumer<ItemProvider>(builder: (context, itemProvider, child) {
     return ToggleButtons(
-      children: [
-        ...item.sizes
-            .map((size) => itemProvider.buildSelections(size.toString()))
-      ],
+      children: [...item.sizes.map(_buildSelections)],
       onPressed: (int index) {
         itemProvider.getSelectedButton(itemIndex, index);
       },
@@ -141,5 +128,9 @@ class _ToggleButtonWidget extends StatelessWidget {
       selectedColor: Colors.white,
       borderColor: Colors.grey[500],
     );
-  }
+  });
+}
+
+Widget _buildSelections(String size) {
+  return Text(size ?? '...', style: TextStyles.label);
 }

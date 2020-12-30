@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class TextStyles {
   static const pagetitle = TextStyle(
-      fontSize: 25,
+      fontSize: 20,
       fontFamily: 'Raleway',
       fontWeight: FontWeight.w600,
       color: Colors.black,
@@ -27,7 +27,7 @@ class TextStyles {
   static const label = TextStyle(
       fontSize: 15,
       fontStyle: FontStyle.italic,
-      color: Colors.black,
+      //color: Colors.black,
       letterSpacing: 2);
 
   static const snackbartitle = TextStyle(

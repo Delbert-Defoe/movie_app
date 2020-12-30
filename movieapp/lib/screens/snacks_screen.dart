@@ -17,28 +17,6 @@ class SnacksScreen extends StatefulWidget {
 }
 
 class _SnacksScreenState extends State<SnacksScreen> {
-  List<Color> gradient = [
-    Colors.green[800],
-    Colors.green[300],
-    Colors.grey[200]
-  ];
-
-  int gradientNumber = 0;
-
-  void changeContainerColor() {
-    if (gradientNumber == 0) {
-      gradientNumber = 1;
-      setState(() {
-        gradient = [Colors.green[200], Colors.green[300], Colors.grey[400]];
-      });
-    } else if (gradientNumber == 1) {
-      gradientNumber = 0;
-      setState(() {
-        gradient = [Colors.green[500], Colors.green[300], Colors.grey[200]];
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var itemProvider = Provider.of<ItemProvider>(context);
@@ -61,7 +39,7 @@ class _SnacksScreenState extends State<SnacksScreen> {
               Navigator.pop(context);
             },
           ),
-          title: Text('Snacks', style: TextStyles.pagetitle),
+          title: Text('🍿 Snacks', style: TextStyles.pagetitle),
           actions: <Widget>[_CartIcon()],
         ),
         body: itemProvider.items.isEmpty
@@ -72,7 +50,7 @@ class _SnacksScreenState extends State<SnacksScreen> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey[800],
+                    color: Colors.grey[700],
                   ),
                   child: Column(children: [
                     Flexible(
@@ -105,94 +83,6 @@ class _SnacksScreenState extends State<SnacksScreen> {
                     item: item,
                     itemIndex: itemIndex,
                   );
-/*
-                  return AnimatedContainer(
-                      duration: Duration(milliseconds: 500),
-                      margin: EdgeInsets.only(
-                          top: 10, bottom: 10, left: 15, right: 15),
-                      padding: EdgeInsets.all(0),
-                      height: 200,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: gradient),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(children: <Widget>[
-                        FutureBuilder(
-                            future:
-                                DatabaseService().getItemPicture(item.imgUrl),
-                            builder: (context, AsyncSnapshot<String> snapshot) {
-                              if (!snapshot.hasData)
-                                return CircularProgressIndicator(
-                                  backgroundColor:
-                                      Theme.of(context).primaryColor,
-                                );
-
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: FadeInImage.memoryNetwork(
-                                  placeholder: kTransparentImage,
-                                  image: snapshot.data,
-                                  height: 200,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              );
-                            }),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Text(
-                                item.name,
-                                style: TextStyles.itemtitle,
-                              ),
-                              Text(
-                                '\$${itemProvider.getPrice(item).toStringAsFixed(2)}',
-                                style: TextStyles.prices,
-                              ),
-                              InkWell(
-                                child: FlatButton.icon(
-                                    icon: Icon(
-                                      Icons.add,
-                                      size: 30,
-                                    ),
-                                    label: Text('Add'),
-                                    onPressed: () {
-                                      Scaffold.of(context)
-                                          .showSnackBar(SnackBar(
-                                        backgroundColor:
-                                            Theme.of(context).primaryColor,
-                                        content: Text(
-                                          '${item.name} Added To Cart!',
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                                        duration: Duration(seconds: 1),
-                                      ));
-
-                                      itemProvider.addItem(item);
-                                    }),
-                              ),
-                              ToggleButtons(
-                                children: [
-                                  ...item.sizes.map((size) => itemProvider
-                                      .buildSelections(size.toString()))
-                                ],
-                                onPressed: (int index) {
-                                  itemProvider.getSelectedButton(
-                                      itemIndex, index);
-                                },
-                                //the index used below is the index provided by the listview builder
-                                isSelected: item.selections,
-                                fillColor: Colors.green,
-                                selectedColor: Colors.white,
-                                borderColor: Colors.grey[500],
-                              )
-                            ]),
-                      ]));
-                */
                 }));
   }
 }
@@ -204,35 +94,37 @@ class _CartIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     var itemProvider = Provider.of<ItemProvider>(context);
 
-    return FlatButton(
-      color: Colors.transparent,
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => CartScreen()));
-      },
-      child: Stack(
-        fit: StackFit.loose,
-        children: [
-          Icon(
-            Icons.shopping_cart,
-            size: 35,
-            color: Colors.black,
-          ),
-          itemProvider.cart.isEmpty
-              ? Container(
-                  height: 0,
-                  width: 0,
-                )
-              : Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Container(
-                    height: cartIndicatorSize,
-                    width: cartIndicatorSize,
-                    decoration: BoxDecoration(
-                        color: Colors.red, shape: BoxShape.circle),
-                  ))
-        ],
+    return InkWell(
+      child: FlatButton(
+        color: Colors.transparent,
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => CartScreen()));
+        },
+        child: Stack(
+          fit: StackFit.loose,
+          children: [
+            Icon(
+              Icons.shopping_cart,
+              size: 30,
+              color: Colors.black,
+            ),
+            itemProvider.cart.isEmpty
+                ? Container(
+                    height: 0,
+                    width: 0,
+                  )
+                : Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                      height: cartIndicatorSize,
+                      width: cartIndicatorSize,
+                      decoration: BoxDecoration(
+                          color: Colors.red, shape: BoxShape.circle),
+                    ))
+          ],
+        ),
       ),
     );
   }
