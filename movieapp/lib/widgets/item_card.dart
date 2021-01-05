@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -50,9 +51,17 @@ class ItemCard extends StatelessWidget {
                   return LayoutBuilder(builder: (context, constraints) {
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: FadeInImage.memoryNetwork(
-                        placeholder: kTransparentImage,
-                        image: snapshot.data,
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => Opacity(
+                          opacity: 0.2,
+                          child: Image(
+                              image:
+                                  AssetImage('assets/images/movie_snacks.jpg'),
+                              height: constraints.maxHeight,
+                              width: constraints.maxWidth,
+                              fit: BoxFit.cover),
+                        ),
+                        imageUrl: snapshot.data,
                         height: constraints.maxHeight,
                         width: constraints.maxWidth,
                         fit: BoxFit.cover,

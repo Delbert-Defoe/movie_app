@@ -14,7 +14,8 @@ class TextStyles {
       fontFamily: 'Raleway',
       fontSize: 20,
       fontWeight: FontWeight.w500,
-      color: Colors.black,
+      //color: Colors.black,
+      color: Color(0xFF00660D),
       letterSpacing: 2);
 
   static const itemtitle = TextStyle(
