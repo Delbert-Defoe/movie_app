@@ -50,19 +50,7 @@ class _UpcomingMoviesState extends State<UpcomingMovies> {
     Movie movie = Movie.fromData(movieSnapshot.data());
     return GestureDetector(
       onTap: () {
-        //  Navigator.push(
-        //      context,
-        //      ScaleAnimation(
-        //          widget: MovieScreen(
-        //        movie: movie,
-        //      )));
-
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MovieScreen(
-                      movie: movie,
-                    )));
+        Navigator.pushNamed(context, '/movie_screen', arguments: movie);
       },
       child: TweenAnimationBuilder(
         duration: Duration(milliseconds: 500),

@@ -25,10 +25,25 @@ class TextStyles {
       color: Colors.black,
       letterSpacing: 0);
 
+  static const itemtitlewhite = TextStyle(
+      fontSize: 30,
+      fontFamily: 'Raleway',
+      fontWeight: FontWeight.w700,
+      color: Colors.white,
+      letterSpacing: 0);
+
   static const label = TextStyle(
+      fontFamily: 'Raleway',
       fontSize: 15,
       fontStyle: FontStyle.italic,
       //color: Colors.black,
+      letterSpacing: 2);
+
+  static const labelwhite = TextStyle(
+      fontFamily: 'Raleway',
+      fontSize: 15,
+      fontStyle: FontStyle.italic,
+      color: Colors.white,
       letterSpacing: 2);
 
   static const snackbartitle = TextStyle(

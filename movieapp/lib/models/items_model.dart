@@ -205,7 +205,8 @@ class ItemProvider extends ChangeNotifier {
       title: Text('Item Purcahse'),
       content: RichText(
           text: TextSpan(
-              style: TextStyle(fontSize: 20, color: Colors.black),
+              style: TextStyle(
+                  fontSize: 20, color: Colors.black, fontFamily: 'Raleway'),
               children: <TextSpan>[
             TextSpan(text: 'Are you sure that you would like to purchase '),
             TextSpan(

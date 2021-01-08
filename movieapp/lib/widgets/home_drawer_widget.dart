@@ -41,8 +41,7 @@ class HomeDrawer extends StatelessWidget {
               style: TextStyle(color: Colors.black, fontSize: itemfontSize),
             ),
             onTap: () {
-              Navigator.push(
-                  context, ScaleAnimationTwo(widget: MyTicketsPage()));
+              Navigator.pushNamed(context, '/tickets_screen');
             },
           ),
           ListTile(
@@ -53,8 +52,7 @@ class HomeDrawer extends StatelessWidget {
             title: Text('Snacks',
                 style: TextStyle(color: Colors.black, fontSize: itemfontSize)),
             onTap: () {
-              Navigator.push(
-                  context, ScaleAnimationTwo(widget: SnacksScreen()));
+              Navigator.pushNamed(context, '/snack_screen');
             },
           ),
           ListTile(
@@ -71,7 +69,9 @@ class HomeDrawer extends StatelessWidget {
             leading: Icon(Icons.settings, color: Colors.black),
             title: Text('Add Movie',
                 style: TextStyle(color: Colors.black, fontSize: itemfontSize)),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/add_movie');
+            },
           ),
           ListTile(
             leading: Icon(Icons.settings, color: Colors.black),

@@ -75,8 +75,6 @@ class CartScreen extends StatelessWidget {
               itemCount: itemProvider.cart.length,
               itemBuilder: (BuildContext context, int index) {
                 var item = itemProvider.cart[index];
-                // return _cartItemTile(context);
-
                 return Column(
                   children: [
                     FutureBuilder(
@@ -87,30 +85,32 @@ class CartScreen extends StatelessWidget {
                               backgroundColor: Theme.of(context).primaryColor,
                             );
                           return ListTile(
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: CachedNetworkImage(
-                                placeholder: (context, url) =>
-                                    CircularProgressIndicator(
-                                  backgroundColor:
-                                      Theme.of(context).primaryColor,
-                                ),
-                                imageUrl: snapshot.data,
-                                height: 200,
-                                width: 100,
-                                fit: BoxFit.cover,
-                              ),
+                            leading: Container(
+                              decoration: BoxDecoration(shape: BoxShape.circle),
+                              child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                return ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50)),
+                                  child: CachedNetworkImage(
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                    ),
+                                    imageUrl: snapshot.data,
+                                    height: constraints.maxHeight,
+                                    width: constraints.maxWidth * 0.2,
+                                    fit: BoxFit.cover,
+                                  ),
+                                );
+                              }),
                             ),
                             title: Text(item.name,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.w600)),
+                                style: TextStyles.itemtitlewhite),
                             subtitle: Text(
-                              '${item.size}: \$${item.price.toStringAsFixed(2)}',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
+                                '${item.size}: \$${item.price.toStringAsFixed(2)}',
+                                style: TextStyles.labelwhite),
                             trailing: IconButton(
                               icon: Icon(
                                 Icons.delete,
@@ -125,11 +125,9 @@ class CartScreen extends StatelessWidget {
                           );
                         }),
                     Divider(
-                      color: Colors.white,
-                      endIndent: 50,
-                      indent: 50,
-                      height: devHeight * 0.02,
-                      thickness: 0.1,
+                      color: Colors.grey,
+                      height: 20,
+                      thickness: 0.3,
                     )
                   ],
                 );
@@ -139,49 +137,9 @@ class CartScreen extends StatelessWidget {
   }
 }
 
-Widget _cartItemTile(BuildContext context) {
-  var itemProvider = Provider.of<ItemProvider>(context);
-  return ListTile(
-      leading: CircleAvatar(
-          child: FutureBuilder(
-              future: DatabaseService()
-                  .getItemPicture(itemProvider.items[0].imgUrl),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData)
-                  return CircularProgressIndicator(
-                    backgroundColor: Theme.of(context).primaryColor,
-                  );
-                return ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: CachedNetworkImage(
-                      placeholder: (context, url) => CircularProgressIndicator(
-                        backgroundColor: Theme.of(context).primaryColor,
-                      ),
-                      imageUrl: snapshot.data,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  tileColor: Colors.white,
-                  title: Text(itemProvider.cart[0].name ?? 'Snack',
-                      style: TextStyles.itemtitle),
-                  subtitle: Text(
-                    '${itemProvider.cart[0].size} : ${itemProvider.cart[0].size}' ??
-                        'Price',
-                    style: TextStyles.label,
-                  ),
-                  trailing: IconButton(
-                    onPressed: () {
-                      itemProvider.cart.remove(itemProvider.cart[0]);
-                    },
-                    color: Theme.of(context).primaryColor,
-                    icon: Icon(
-                      Icons.delete,
-                      size: 30,
-                    ),
-                  ),
-                );
-              })));
+class ItemImage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {}
 }
 
 class _BottomNav extends StatelessWidget {

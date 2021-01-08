@@ -17,7 +17,6 @@ class WeeklyMovies extends StatefulWidget {
 }
 
 class _WeeklyMoviesState extends State<WeeklyMovies> {
-  //List<Movie> ourmovies;
   final db = DatabaseService();
 
   @override
@@ -25,7 +24,6 @@ class _WeeklyMoviesState extends State<WeeklyMovies> {
     var ticketProvider = Provider.of<TicketModel>(context);
     return Container(
       height: 300,
-      //color: Colors.red,
       child: StreamBuilder(
           stream: db.getMovies(context, true),
           builder:
@@ -50,19 +48,7 @@ class _WeeklyMoviesState extends State<WeeklyMovies> {
     Movie movie = Movie.fromData(movieSnapshot.data());
     return GestureDetector(
       onTap: () {
-        //  Navigator.push(
-        //      context,
-        //      ScaleAnimation(
-        //          widget: MovieScreen(
-        //        movie: movie,
-        //      )));
-
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MovieScreen(
-                      movie: movie,
-                    )));
+        Navigator.pushNamed(context, '/movie_screen', arguments: movie);
       },
       child: TweenAnimationBuilder(
         duration: Duration(milliseconds: 500),

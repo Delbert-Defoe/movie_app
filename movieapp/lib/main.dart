@@ -5,6 +5,7 @@ import 'package:movieapp/models/user_model.dart';
 import 'package:movieapp/screens/authenticate_screen.dart';
 import 'package:movieapp/services/auth_wrapper.dart';
 import 'package:movieapp/services/authentication.dart';
+import 'package:movieapp/services/router.dart';
 import 'package:sqflite/sqflite.dart';
 import './screens/home_screen.dart';
 import './models/ticket_model.dart';
@@ -23,9 +24,6 @@ void main() async {
     ChangeNotifierProvider(
       create: (context) => ItemProvider(),
     ),
-    // ChangeNotifierProvider(
-    //   create: (context) => LocalUser(),
-    // )
   ], child: MyApp()));
 }
 
@@ -54,6 +52,8 @@ class MyApp extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+        initialRoute: '/',
+        onGenerateRoute: RouteGenerator.generateRoute,
         home: StreamProvider<LocalUser>.value(
           value: AuthService().user,
           child: Wrapper(),
