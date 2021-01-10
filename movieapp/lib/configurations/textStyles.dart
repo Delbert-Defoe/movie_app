@@ -53,8 +53,15 @@ class TextStyles {
       color: Colors.black);
 
   static const carouseltitle = TextStyle(
-      fontSize: 30,
+      fontSize: 25,
       fontWeight: FontWeight.w700,
+      fontFamily: 'Raleway',
+      color: Colors.white,
+      letterSpacing: 1);
+
+  static const movieTitle = TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w500,
       fontFamily: 'Raleway',
       color: Colors.white);
 }

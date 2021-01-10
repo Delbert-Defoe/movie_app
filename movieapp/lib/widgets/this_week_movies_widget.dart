@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:movieapp/models/ticket_model.dart';
+import 'package:movieapp/widgets/movie_card.dart';
 import '../models/movies_model.dart';
 import '../screens/movie_screen.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,6 @@ class _WeeklyMoviesState extends State<WeeklyMovies> {
 
   @override
   Widget build(BuildContext context) {
-    var ticketProvider = Provider.of<TicketModel>(context);
     return Container(
       height: 300,
       child: StreamBuilder(
@@ -36,9 +36,11 @@ class _WeeklyMoviesState extends State<WeeklyMovies> {
                 physics: BouncingScrollPhysics(),
                 //padding: EdgeInsets.all(5.0),
                 scrollDirection: Axis.horizontal,
+                //controller: _scrollController,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (BuildContext context, int index) =>
-                    buildMovieWidget(context, snapshot.data.docs[index]));
+                    // buildMovieWidget(context, snapshot.data.docs[index]))
+                    MovieCard(movieSnapshot: snapshot.data.docs[index]));
           }),
     );
   }

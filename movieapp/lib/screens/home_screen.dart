@@ -38,50 +38,47 @@ class HomeScreen extends StatelessWidget {
       drawer: HomeDrawer(),
       body: ListView(physics: BouncingScrollPhysics(), children: <Widget>[
         Container(
-          color: Colors.red,
+          //color: Colors.red,
           child: Column(children: <Widget>[
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               child: Container(
-                color: Colors.blue,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TweenAnimationBuilder(
-                        duration: Duration(milliseconds: 500),
-                        tween: Tween<double>(begin: 0, end: 1),
-                        curve: Curves.easeIn,
-                        child: Text('This Week',
+                //color: Colors.blue,
+                child: TweenAnimationBuilder(
+                    duration: Duration(milliseconds: 500),
+                    tween: Tween<double>(begin: 0, end: 1),
+                    curve: Curves.easeIn,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('This Week', style: TextStyles.carouseltitle),
+                        FlatButton(
+                          onPressed: () => _showBottomModalSheet(context),
+                          child: Text(
+                            'See Schedule',
                             style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 30,
-                                letterSpacing: 1.5,
-                                fontWeight: FontWeight.bold)),
-                        builder: (context, _tween, child) {
-                          return Transform.translate(
-                            offset: Offset(100 - _tween * 100, 0),
-                            child: Opacity(
-                              opacity: _tween,
-                              child: child,
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Raleway',
+                              fontStyle: FontStyle.italic,
+                              decoration: TextDecoration.underline,
+                              decorationThickness: 2.0,
                             ),
-                          );
-                        }),
-                    FlatButton(
-                      onPressed: () => _showBottomModalSheet(context),
-                      child: Text(
-                        'See Schedule',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          decoration: TextDecoration.underline,
-                          decorationThickness: 2.0,
+                          ),
+                        )
+                      ],
+                    ),
+                    builder: (context, _tween, child) {
+                      return Transform.translate(
+                        offset: Offset(100 - _tween * 100, 0),
+                        child: Opacity(
+                          opacity: _tween,
+                          child: child,
                         ),
-                      ),
-                    )
-                  ],
-                ),
+                      );
+                    }),
               ),
             ),
             WeeklyMovies(),
@@ -100,11 +97,7 @@ class HomeScreen extends StatelessWidget {
                 tween: Tween<double>(begin: 0, end: 1),
                 child: Text(
                   'Upcoming Movies',
-                  style: TextStyle(
-                      fontSize: 30,
-                      letterSpacing: 1.5,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                  style: TextStyles.carouseltitle,
                 ),
                 builder: (context, _tween, child) {
                   return Transform.translate(

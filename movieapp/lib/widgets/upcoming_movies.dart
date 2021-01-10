@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:movieapp/models/ticket_model.dart';
+import 'package:movieapp/widgets/movie_card.dart';
 import '../models/movies_model.dart';
 import '../screens/movie_screen.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +41,8 @@ class _UpcomingMoviesState extends State<UpcomingMovies> {
                 reverse: true,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (BuildContext context, int index) =>
-                    buildMovieWidget(context, snapshot.data.docs[index]));
+                    MovieCard(movieSnapshot: snapshot.data.docs[index]));
+            //buildMovieWidget(context, snapshot.data.docs[index]));
           }),
     );
   }
