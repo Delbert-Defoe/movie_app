@@ -51,4 +51,10 @@ class TextStyles {
       fontWeight: FontWeight.w500,
       fontFamily: 'Raleway',
       color: Colors.black);
+
+  static const carouseltitle = TextStyle(
+      fontSize: 30,
+      fontWeight: FontWeight.w700,
+      fontFamily: 'Raleway',
+      color: Colors.white);
 }

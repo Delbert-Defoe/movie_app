@@ -41,6 +41,7 @@ class _SnacksScreenState extends State<SnacksScreen> {
       _cardheight = _screenHeight / 4;
     }
     _cardwidth = _screenWidth;
+
     if (itemProvider.items.isEmpty) {
       itemProvider.getItems();
     } // If the item list is empty, it will populate the item

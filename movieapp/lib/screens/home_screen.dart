@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:movieapp/configurations/textStyles.dart';
 import 'package:movieapp/widgets/this_week_movies_widget.dart';
 import 'package:movieapp/widgets/upcoming_movies.dart';
 import 'package:movieapp/models/user_model.dart';
@@ -30,93 +31,96 @@ class HomeScreen extends StatelessWidget {
         }),
         title: Text(
           'Emerald Movies',
-          style: TextStyle(color: Colors.black),
+          style: TextStyles.pagetitle,
         ),
         actions: <Widget>[],
       ),
       drawer: HomeDrawer(),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.black),
-        child: ListView(physics: BouncingScrollPhysics(), children: <Widget>[
-          Padding(
-            padding: EdgeInsets.fromLTRB(20, 20, 10, 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TweenAnimationBuilder(
-                    duration: Duration(milliseconds: 500),
-                    tween: Tween<double>(begin: 0, end: 1),
-                    curve: Curves.easeIn,
-                    child: Text('This Week',
+      body: ListView(physics: BouncingScrollPhysics(), children: <Widget>[
+        Container(
+          color: Colors.red,
+          child: Column(children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              child: Container(
+                color: Colors.blue,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TweenAnimationBuilder(
+                        duration: Duration(milliseconds: 500),
+                        tween: Tween<double>(begin: 0, end: 1),
+                        curve: Curves.easeIn,
+                        child: Text('This Week',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                                letterSpacing: 1.5,
+                                fontWeight: FontWeight.bold)),
+                        builder: (context, _tween, child) {
+                          return Transform.translate(
+                            offset: Offset(100 - _tween * 100, 0),
+                            child: Opacity(
+                              opacity: _tween,
+                              child: child,
+                            ),
+                          );
+                        }),
+                    FlatButton(
+                      onPressed: () => _showBottomModalSheet(context),
+                      child: Text(
+                        'See Schedule',
                         style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30,
-                            letterSpacing: 1.5,
-                            fontWeight: FontWeight.bold)),
-                    builder: (context, _tween, child) {
-                      return Transform.translate(
-                        offset: Offset(100 - _tween * 100, 0),
-                        child: Opacity(
-                          opacity: _tween,
-                          child: child,
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline,
+                          decorationThickness: 2.0,
                         ),
-                      );
-                    }),
-                FlatButton(
-                  onPressed: () => _showBottomModalSheet(context),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      'See Schedule',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        decoration: TextDecoration.underline,
-                        decorationThickness: 2.0,
                       ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          WeeklyMovies(),
-          SizedBox(
-            height: 15,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                TweenAnimationBuilder(
-                  duration: Duration(milliseconds: 500),
-                  tween: Tween<double>(begin: 0, end: 1),
-                  child: Text(
-                    'Upcoming Movies',
-                    style: TextStyle(
-                        fontSize: 30,
-                        letterSpacing: 1.5,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  builder: (context, _tween, child) {
-                    return Transform.translate(
-                      offset: Offset(-100 + _tween * 100, 0),
-                      child: Opacity(opacity: _tween, child: child),
-                    );
-                  },
+                    )
+                  ],
                 ),
-              ],
+              ),
             ),
+            WeeklyMovies(),
+            SizedBox(
+              height: 15,
+            ),
+          ]),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              TweenAnimationBuilder(
+                duration: Duration(milliseconds: 500),
+                tween: Tween<double>(begin: 0, end: 1),
+                child: Text(
+                  'Upcoming Movies',
+                  style: TextStyle(
+                      fontSize: 30,
+                      letterSpacing: 1.5,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                builder: (context, _tween, child) {
+                  return Transform.translate(
+                    offset: Offset(-100 + _tween * 100, 0),
+                    child: Opacity(opacity: _tween, child: child),
+                  );
+                },
+              ),
+            ],
           ),
-          UpcomingMovies(),
-          SizedBox(
-            height: 15,
-          ),
-        ]),
-      ),
+        ),
+        UpcomingMovies(),
+        SizedBox(
+          height: 15,
+        ),
+      ]),
     );
   }
 
