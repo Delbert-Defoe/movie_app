@@ -53,15 +53,18 @@ class _MovieCardState extends State<MovieCard> {
                         children: <Widget>[
                           ClipRRect(
                             borderRadius: BorderRadius.circular(_borderRadius),
-                            child: CachedNetworkImage(
-                              height: _cardHeight,
-                              width: _cardwidth,
-                              fit: BoxFit.cover,
-                              imageUrl: snapshot.data,
-                              placeholder: (context, url) => Center(
-                                child: CircularProgressIndicator(
-                                    backgroundColor:
-                                        Theme.of(context).primaryColor),
+                            child: Hero(
+                              tag: movie.imageUrl,
+                              child: CachedNetworkImage(
+                                height: _cardHeight,
+                                width: _cardwidth,
+                                fit: BoxFit.cover,
+                                imageUrl: snapshot.data,
+                                placeholder: (context, url) => Center(
+                                  child: CircularProgressIndicator(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor),
+                                ),
                               ),
                             ),
                           ),
@@ -126,9 +129,9 @@ class LoadingWidget extends StatelessWidget {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Colors.grey.shade300.withOpacity(0.4),
-                        Colors.grey.shade100.withOpacity(0.5),
-                        Colors.grey.shade300.withOpacity(0.4)
+                        Colors.grey.shade200.withOpacity(0.2),
+                        // Colors.grey.shade100.withOpacity(0.4),
+                        Colors.grey.shade200.withOpacity(0.2)
                       ])),
               child: Center(
                 child: CircularProgressIndicator(

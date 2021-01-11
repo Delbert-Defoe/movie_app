@@ -44,6 +44,7 @@ class _MovieScreenState extends State<MovieScreen> {
                   child: Text(
                     '${widget.movie.title}',
                     style: TextStyle(
+                        fontFamily: 'Raleway',
                         letterSpacing: 4,
                         color: Colors.white,
                         fontSize: 30,
@@ -114,7 +115,10 @@ class _MovieScreenState extends State<MovieScreen> {
                   widget.movie.description,
                   textAlign: TextAlign.justify,
                   style: TextStyle(
-                      color: Colors.white, fontSize: 20, wordSpacing: 1),
+                      fontFamily: 'Raleway',
+                      color: Colors.white,
+                      fontSize: 20,
+                      wordSpacing: 1),
                 ),
               ),
               widget.movie.onscreen

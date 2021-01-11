@@ -56,12 +56,13 @@ class TextStyles {
       fontSize: 25,
       fontWeight: FontWeight.w700,
       fontFamily: 'Raleway',
-      color: Colors.white,
+      color: Color(0xFF00660D),
       letterSpacing: 1);
 
   static const movieTitle = TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.w500,
-      fontFamily: 'Raleway',
-      color: Colors.white);
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Raleway',
+    color: Color(0xFFEDF3F6),
+  );
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:movieapp/models/items_model.dart';
 import '../models/movies_model.dart';
@@ -22,28 +24,31 @@ class _TicketWidgetState extends State<TicketWidgetTest> {
 
     return Container(
       height: 570,
+      padding: EdgeInsets.all(10),
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(colors: [Colors.grey[400], Colors.green]),
+        gradient: LinearGradient(colors: [Colors.grey[200], Colors.green]),
       ),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 15.0, top: 10, bottom: 0),
-              child: Text('Ticket: ',
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold)),
-            ),
-            Container(
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+          Widget>[
+        Padding(
+          padding: EdgeInsets.only(left: 5.0, top: 0, bottom: 0),
+          child: Text('Ticket: ',
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 25,
+                  fontFamily: 'Raleway',
+                  fontWeight: FontWeight.bold)),
+        ),
+        ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+            child: Container(
               height: 500,
-              margin: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: Color(0xFF524E4E),
-                  borderRadius: BorderRadius.circular(20)),
+                  color: Color(0xFF524E4E).withOpacity(0.5),
+                  borderRadius: BorderRadius.all(Radius.circular(0))),
               child: Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Column(
@@ -56,7 +61,9 @@ class _TicketWidgetState extends State<TicketWidgetTest> {
                           Text(
                             'Screening: ',
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w800),
+                                fontFamily: 'Raleway',
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600),
                           ),
                           ticketProvider.showScreeningWidget(widget.movie),
                         ],
@@ -100,7 +107,7 @@ class _TicketWidgetState extends State<TicketWidgetTest> {
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w800)),
                           DropdownButton<String>(
-                              dropdownColor: Colors.green[500],
+                              dropdownColor: Colors.green[500].withOpacity(0.8),
                               underline: Container(
                                 color: Colors.black,
                                 height: 1,
@@ -203,8 +210,10 @@ class _TicketWidgetState extends State<TicketWidgetTest> {
                           ])
                     ]),
               ),
-            )
-          ]),
+            ),
+          ),
+        )
+      ]),
     );
   }
 }

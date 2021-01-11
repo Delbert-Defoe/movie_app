@@ -37,10 +37,13 @@ class _SnacksScreenState extends State<SnacksScreen> {
 
     if (_screenHeight < 450) {
       _cardheight = _screenHeight / 2;
-    } else {
+    } else if (_screenHeight < 600) {
+      _cardheight = _screenHeight / 2.8;
+    } else if (_screenHeight < 1250) {
       _cardheight = _screenHeight / 4;
     }
     _cardwidth = _screenWidth;
+    var _togglebuttonSize = _cardheight / 4.5;
 
     if (itemProvider.items.isEmpty) {
       itemProvider.getItems();
@@ -172,6 +175,9 @@ class _SnacksScreenState extends State<SnacksScreen> {
                                           }),
                                     ),
                                     ToggleButtons(
+                                      constraints: BoxConstraints.expand(
+                                          width: _togglebuttonSize,
+                                          height: _togglebuttonSize),
                                       children: [
                                         ...item.sizes
                                             .map(itemProvider.buildSelections)

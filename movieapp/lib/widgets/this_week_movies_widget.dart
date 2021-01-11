@@ -2,6 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:movieapp/widgets/scheduleWidget.dart';
+import 'package:transparent_image/transparent_image.dart';
+
 import 'package:movieapp/models/ticket_model.dart';
 import 'package:movieapp/widgets/movie_card.dart';
 import '../models/movies_model.dart';
@@ -9,8 +13,7 @@ import '../screens/movie_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:movieapp/services/database.dart';
 import 'package:movieapp/animations/pageRouteScaleAnimation.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:movieapp/configurations/textStyles.dart';
 
 class WeeklyMovies extends StatefulWidget {
   @override
@@ -22,95 +25,81 @@ class _WeeklyMoviesState extends State<WeeklyMovies> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300,
-      child: StreamBuilder(
-          stream: db.getMovies(context, true),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData)
-              return SpinKitWave(
-                  color: Theme.of(context).primaryColor,
-                  size: MediaQuery.of(context).size.width / 5);
-            return ListView.builder(
-                physics: BouncingScrollPhysics(),
-                //padding: EdgeInsets.all(5.0),
-                scrollDirection: Axis.horizontal,
-                //controller: _scrollController,
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    // buildMovieWidget(context, snapshot.data.docs[index]))
-                    MovieCard(movieSnapshot: snapshot.data.docs[index]));
-          }),
-    );
-  }
+    final _mediaQuery = MediaQuery.of(context);
 
-  Widget buildMovieWidget(
-      BuildContext context, DocumentSnapshot movieSnapshot) {
-    Movie movie = Movie.fromData(movieSnapshot.data());
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/movie_screen', arguments: movie);
-      },
-      child: TweenAnimationBuilder(
-        duration: Duration(milliseconds: 500),
-        tween: Tween<double>(begin: 1, end: 0),
-        curve: Curves.bounceIn,
-        child: Container(
-          margin: EdgeInsets.only(left: 20.0, top: 5.0, bottom: 5.0),
-          width: 220,
-          child: Stack(children: <Widget>[
-            FutureBuilder(
-                future: DatabaseService().getPicture(movie.imageUrl),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (!snapshot.hasData)
-                    return SpinKitWave(
-                      size: 50,
-                      color: Theme.of(context).primaryColor,
-                    );
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Hero(
-                      tag: movie.imageUrl,
-                      child: CachedNetworkImage(
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(
-                          backgroundColor: Theme.of(context).primaryColor,
+    var _carouselHeight = _mediaQuery.size.height / 2;
+
+    if (_mediaQuery.size.height < 450) {
+      _carouselHeight = _mediaQuery.size.height;
+    }
+
+    return Container(
+        height: _carouselHeight,
+        child: Column(children: [
+          Flexible(
+            flex: 2,
+            child: TweenAnimationBuilder(
+                duration: Duration(milliseconds: 500),
+                tween: Tween<double>(begin: 0, end: 1),
+                curve: Curves.easeIn,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('This Week', style: TextStyles.carouseltitle),
+                      FlatButton(
+                        padding: EdgeInsets.only(top: 0, bottom: 0),
+                        onPressed: () => showBottomModalSheet(context),
+                        child: Text(
+                          'See Schedule',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Raleway',
+                            fontStyle: FontStyle.italic,
+                            decoration: TextDecoration.underline,
+                            decorationThickness: 2.0,
+                          ),
                         ),
-                        imageUrl: snapshot.data,
-                        height: 300,
-                        width: 220,
-                        fit: BoxFit.cover,
-                      ),
+                      )
+                    ],
+                  ),
+                ),
+                builder: (context, _tween, child) {
+                  return Transform.translate(
+                    offset: Offset(100 - _tween * 100, 0),
+                    child: Opacity(
+                      opacity: _tween,
+                      child: child,
                     ),
                   );
                 }),
-            Positioned(
-                left: 5.0,
-                bottom: 20.0,
-                child: Text(
-                  movie.title,
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white),
-                ))
-          ]),
-        ),
-        builder: (context, _tween, child) {
-          return Transform.translate(
-            offset: Offset(_tween * 100, 0),
-            child: Transform.scale(
-              scale: 1 - _tween,
-              child: child,
-              alignment: Alignment.center,
-            ),
-          );
-        },
-      ),
-    );
+          ),
+          Flexible(
+            flex: 8,
+            child: StreamBuilder(
+                stream: db.getMovies(context, true),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData)
+                    return SpinKitWave(
+                        color: Theme.of(context).primaryColor,
+                        size: MediaQuery.of(context).size.width / 5);
+                  return ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      //padding: EdgeInsets.all(5.0),
+                      scrollDirection: Axis.horizontal,
+                      //controller: _scrollController,
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          // buildMovieWidget(context, snapshot.data.docs[index]))
+                          MovieCard(movieSnapshot: snapshot.data.docs[index]));
+                }),
+          ),
+        ]));
   }
-
-  //Stream<DocumentSnapshot>
 }
