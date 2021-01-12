@@ -65,4 +65,45 @@ class TextStyles {
     fontFamily: 'Raleway',
     color: Color(0xFFEDF3F6),
   );
+
+  static const boldGreenText = TextStyle(
+      fontFamily: 'Raleway',
+      fontSize: 30,
+      fontWeight: FontWeight.bold,
+      color: Color(0xFF00660D));
+
+  static const movieDescription = TextStyle(
+    fontFamily: 'Raleway',
+    color: Colors.white,
+    fontSize: 20,
+    wordSpacing: 1,
+  );
+
+  static const moviePageTitle = TextStyle(
+      fontFamily: 'Raleway',
+      letterSpacing: 4,
+      color: Colors.white,
+      fontSize: 25,
+      fontWeight: FontWeight.w600,
+      shadows: [
+        Shadow(blurRadius: 10, color: Colors.black, offset: Offset(1, 1))
+      ]);
+
+  static const ticketTitle = TextStyle(
+      color: Color(0xFF00660D),
+      fontSize: 25,
+      fontFamily: 'Raleway',
+      fontWeight: FontWeight.bold);
+
+  static const ticketWidgetElements = TextStyle(
+    fontFamily: 'Raleway',
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+  );
+
+  static const drawerElements = TextStyle(
+      fontFamily: 'Raleway',
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+      fontSize: 20);
 }

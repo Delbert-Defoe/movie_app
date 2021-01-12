@@ -1,104 +1,135 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:movieapp/configurations/textStyles.dart';
+import 'package:movieapp/models/items_model.dart';
 import '../models/movies_model.dart';
 import '../models/ticket_model.dart';
 import 'package:provider/provider.dart';
 
-class TicketWidget extends StatefulWidget {
+class NewTicketWidget extends StatefulWidget {
   Movie movie;
 
-  TicketWidget({this.movie});
+  NewTicketWidget({@required this.movie});
 
   @override
-  _TicketWidgetState createState() => _TicketWidgetState();
+  _NewTicketWidgetState createState() => _NewTicketWidgetState();
 }
 
-class _TicketWidgetState extends State<TicketWidget> {
-  String selectedValue = 'Child';
+class _NewTicketWidgetState extends State<NewTicketWidget> {
+  var selectedValue = 'Adult';
   @override
   Widget build(BuildContext context) {
-//Nested in this container is a column, which has a text widget and another container in it. The container has a column with rows in it.
     var ticketProvider = Provider.of<TicketModel>(context);
 
+    final _mediaQuery = MediaQuery.of(context);
+    var _screenHeight = _mediaQuery.size.height;
+    var _screenWidth = _mediaQuery.size.width;
+    double _cardHeight = 600;
+    double _padding;
+    double _margin;
+    var _borderRadius = Radius.circular(20);
+
+    if (_screenWidth < 400) {
+      _padding = 10;
+      _margin = 0;
+    } else {
+      _padding = 20;
+      _margin = 20;
+    }
+
+    //  if (_screenHeight < 600) {
+    //    _cardHeight = _screenHeight;
+    //  } else {
+    //    _cardHeight = _screenHeight * 0.7;
+    //  }
+
     return Container(
-      height: 570,
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsets.all(_margin),
+      height: _cardHeight,
+      width: _screenWidth,
+      padding: EdgeInsets.only(
+          left: _padding, right: _padding, top: 0, bottom: _padding),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(colors: [Colors.grey[400], Colors.green]),
-      ),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 15.0, top: 10, bottom: 0),
-              child: Text('Ticket: ',
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold)),
-            ),
-            Container(
-              height: 500,
-              margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: Color(0xFF524E4E),
-                  borderRadius: BorderRadius.circular(20)),
-              child: Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: Column(
+          borderRadius: BorderRadius.all(_borderRadius),
+          gradient: LinearGradient(colors: [Colors.grey[200], Colors.green])),
+      child: Column(children: <Widget>[
+        Flexible(
+            flex: 1,
+            child: Container(
+                // padding: EdgeInsets.only(left: 10),
+                alignment: Alignment.centerLeft,
+                child: Text('Ticket: ', style: TextStyles.ticketTitle))),
+        Flexible(
+          flex: 10,
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(_borderRadius),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              child: Container(
+                  padding: EdgeInsets.all(_padding),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.grey.shade200.withOpacity(0.2),
+                      borderRadius: BorderRadius.all(_borderRadius)),
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      //Screening type row
+                      //Screening Row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
+                        children: [
                           Text(
                             'Screening: ',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w800),
+                            style: TextStyles.ticketWidgetElements,
                           ),
+                          ticketProvider.showScreeningWidget(widget.movie)
                         ],
                       ),
-                      //Quantity Row
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('Quantity: ',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w800)),
-                            IconButton(
-                              //will only allow decrementation if is more than 0
-                              onPressed: ticketProvider.quantity > 0
-                                  ? () => ticketProvider.decrementQuantity()
-                                  : null,
-                              icon: Icon(
-                                Icons.chevron_left,
-                              ),
-                            ),
-                            Text(ticketProvider.quantity.toString(),
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w800)),
-                            IconButton(
-                                //will only allow icrementation if quantity is less than 200
-                                onPressed: ticketProvider.quantity < 10
-                                    ? () => ticketProvider.incrementQuantity()
-                                    : null,
-                                icon: Icon(
-                                  Icons.chevron_right,
-                                )),
-                            IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () => ticketProvider.zeroQuantity())
-                          ]),
-                      //type Row
+
+                      //Quanity Row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
+                        children: [
+                          Text(
+                            'Quantity: ',
+                            style: TextStyles.ticketWidgetElements,
+                          ),
+                          IconButton(
+                            //will only allow decrementation if is more than 0
+                            onPressed: ticketProvider.quantity > 0
+                                ? () => ticketProvider.decrementQuantity()
+                                : null,
+                            icon: Icon(
+                              Icons.chevron_left,
+                            ),
+                          ),
+                          Text(
+                            '${ticketProvider.quantity}',
+                            style: TextStyles.ticketWidgetElements,
+                          ),
+                          IconButton(
+                              //will only allow icrementation if quantity is less than 200
+                              onPressed: ticketProvider.quantity < 10
+                                  ? () => ticketProvider.incrementQuantity()
+                                  : null,
+                              icon: Icon(
+                                Icons.chevron_right,
+                              )),
+                          IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () => ticketProvider.zeroQuantity())
+                        ],
+                      ),
+
+                      //Type Row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
                           Text('Type: ',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w800)),
+                              style: TextStyles.ticketWidgetElements),
                           DropdownButton<String>(
-                              dropdownColor: Colors.green[500],
+                              dropdownColor: Colors.green[500].withOpacity(0.8),
                               underline: Container(
                                 color: Colors.black,
                                 height: 1,
@@ -126,52 +157,57 @@ class _TicketWidgetState extends State<TicketWidget> {
                               onChanged: (String newValue) {
                                 setState(() {
                                   selectedValue = newValue;
-                                  // ticketProvider.typeIndicator(selectedValue);
+                                  ticketProvider.typeIndicator(selectedValue);
                                 });
                               }),
                         ],
                       ),
-                      //Date widget
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      ticketProvider.typeWarning(widget.movie),
+
+                      Wrap(
+                        alignment: WrapAlignment.start,
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        direction: Axis.horizontal,
                         children: <Widget>[
                           Text('Date: ',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w800)),
-                          IconButton(
-                            icon: Icon(Icons.chevron_left),
-                            onPressed: ticketProvider.selectedDate > 0
-                                ? () => ticketProvider.lastDate(widget.movie)
-                                : null,
-                          ),
-                          Text('Hello World',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w800)),
-                          IconButton(
-                            icon: Icon(Icons.chevron_right),
-                            onPressed: ticketProvider.selectedDate <
-                                    widget.movie.timeScreen.length - 1
-                                ? () => ticketProvider.changeDate(widget.movie)
-                                : null,
-                          ),
+                              style: TextStyles.ticketWidgetElements),
+                          Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                IconButton(
+                                  icon: Icon(Icons.chevron_left),
+                                  onPressed: ticketProvider.selectedDate > 0
+                                      ? () =>
+                                          ticketProvider.lastDate(widget.movie)
+                                      : null,
+                                ),
+                                ticketProvider.showDateWidget(widget.movie),
+                                IconButton(
+                                  icon: Icon(Icons.chevron_right),
+                                  onPressed: ticketProvider.selectedDate <
+                                          widget.movie.timeScreen.length - 1
+                                      ? () => ticketProvider
+                                          .changeDate(widget.movie)
+                                      : null,
+                                ),
+                              ])
                         ],
                       ),
+
                       //time widget
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('Time: ',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w800)),
+                                style: TextStyles.ticketWidgetElements),
                             IconButton(
                               icon: Icon(Icons.chevron_left),
                               onPressed: ticketProvider.selectedTime > 0
                                   ? () => ticketProvider.lastTime(widget.movie)
                                   : null,
                             ),
-                            Text('LOL',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w800)),
+                            ticketProvider.showTimeWidget(
+                                widget.movie), //Actual Time widget
                             IconButton(
                               icon: Icon(Icons.chevron_right),
                               onPressed: ticketProvider.selectedTime <
@@ -181,37 +217,34 @@ class _TicketWidgetState extends State<TicketWidget> {
                                   : null,
                             ),
                           ]),
+
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            GestureDetector(
-                              onTap: () {},
-                              child: Text('no',
+                            ticketProvider.priceWidget(),
+                            FlatButton(
+                              child: Text('Buy',
                                   style: TextStyle(
+                                      fontFamily: 'Raleway',
                                       fontSize: 30,
-                                      color: Colors.green[200],
+                                      color: ticketProvider.quantity == 0
+                                          ? Colors.grey[900].withOpacity(0.2)
+                                          : Theme.of(context).primaryColor,
                                       fontWeight: FontWeight.bold)),
-                            ),
-                            GestureDetector(
-                              onTap: ticketProvider.quantity == 0
+                              onPressed: ticketProvider.quantity == 0
                                   ? null
                                   : () {
                                       ticketProvider.buyTicket(
                                           widget.movie, context);
                                     },
-                              child: Text('Buy',
-                                  style: TextStyle(
-                                      fontSize: 30,
-                                      color: ticketProvider.quantity == 0
-                                          ? Colors.grey[900]
-                                          : Colors.green[200],
-                                      fontWeight: FontWeight.bold)),
                             )
                           ])
-                    ]),
-              ),
-            )
-          ]),
+                    ],
+                  )),
+            ),
+          ),
+        ),
+      ]),
     );
   }
 }

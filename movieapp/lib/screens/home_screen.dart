@@ -6,7 +6,6 @@ import 'package:movieapp/widgets/upcoming_movies.dart';
 import 'package:movieapp/models/user_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/movies_model.dart';
-import '../widgets/schedule_widget.dart';
 import '../screens/movie_screen.dart';
 import '../widgets/home_drawer_widget.dart';
 import '../services/local_database.dart';

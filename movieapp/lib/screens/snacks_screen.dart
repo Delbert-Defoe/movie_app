@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
@@ -70,30 +72,36 @@ class _SnacksScreenState extends State<SnacksScreen> {
                 child: FractionallySizedBox(
                 heightFactor: 0.4,
                 widthFactor: 0.5,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey[700],
-                  ),
-                  child: Column(children: [
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Text(
-                          'Fetching Items....',
-                          style: TextStyle(fontSize: 15),
+                child: ClipRRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaY: 20, sigmaX: 20),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey[200].withOpacity(0.5),
+                      ),
+                      child: Column(children: [
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text(
+                              'Fetching Items....',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ),
+                          flex: 1,
                         ),
-                      ),
-                      flex: 1,
+                        Flexible(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                                backgroundColor:
+                                    Theme.of(context).primaryColor),
+                          ),
+                          flex: 4,
+                        )
+                      ]),
                     ),
-                    Flexible(
-                      child: Center(
-                        child: CircularProgressIndicator(
-                            backgroundColor: Theme.of(context).primaryColor),
-                      ),
-                      flex: 4,
-                    )
-                  ]),
+                  ),
                 ),
               ))
             : ListView.builder(

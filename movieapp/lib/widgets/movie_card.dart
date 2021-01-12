@@ -109,12 +109,12 @@ class _MovieCardState extends State<MovieCard> {
 class LoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final mediaInfo = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.of(context);
     final double _borderRadius = 20;
 
     return LayoutBuilder(builder: (context, constraints) {
       var _cardHeight = constraints.maxHeight;
-      var _cardwidth = mediaInfo.size.width / 2;
+      var _cardwidth = mediaQuery.size.width / 2;
       return ClipRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
