@@ -106,4 +106,10 @@ class TextStyles {
       fontWeight: FontWeight.w600,
       color: Colors.black,
       fontSize: 20);
+
+  static const ticketCardTitle = TextStyle(
+      fontFamily: 'Raleway',
+      fontWeight: FontWeight.w500,
+      color: Colors.white,
+      fontSize: 20);
 }

@@ -118,7 +118,11 @@ class ItemProvider extends ChangeNotifier {
   //Retrieve Items from the database
   //TODO: Add order by filter on itemcollection
   void getItems() async {
-    var result = DatabaseService().itemCollection.snapshots().listen((event) {
+    var result = DatabaseService()
+        .itemCollection
+        .orderBy('name')
+        .snapshots()
+        .listen((event) {
       if (items.isEmpty) {
         event.docs.forEach((element) {
           items.add(Item.fromData(element.data()));
@@ -202,7 +206,10 @@ class ItemProvider extends ChangeNotifier {
 //Purchasing items alert dialog
   void purchaseItems(BuildContext context) {
     var alertDialog = AlertDialog(
-      title: Text('Item Purcahse'),
+      title: Text(
+        'Item Purcahse',
+        style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.w800),
+      ),
       content: RichText(
           text: TextSpan(
               style: TextStyle(
@@ -224,7 +231,7 @@ class ItemProvider extends ChangeNotifier {
         FlatButton(
           child: Text(
             'No',
-            style: TextStyle(color: Colors.green[600]),
+            style: TextStyle(fontFamily: 'Raleway', color: Colors.green[600]),
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -233,7 +240,7 @@ class ItemProvider extends ChangeNotifier {
         FlatButton(
           child: Text(
             'Yes',
-            style: TextStyle(color: Colors.green[600]),
+            style: TextStyle(fontFamily: 'Raleway', color: Colors.green[600]),
           ),
           onPressed: () {
             print('i ran');

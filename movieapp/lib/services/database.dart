@@ -42,7 +42,10 @@ class DatabaseService {
 //Get user tickets
   Stream<QuerySnapshot> getUserTickets() async* {
     final uid = await AuthService().getCurrentUser();
-    yield* ticketCollection.where('uid', isEqualTo: uid).snapshots();
+    yield* ticketCollection
+        .where('uid', isEqualTo: uid)
+        .orderBy('dateTime', descending: false)
+        .snapshots();
   }
 
 //Get Movies
