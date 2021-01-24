@@ -58,8 +58,7 @@ class HomeDrawer extends StatelessWidget {
             title: Text('Profile', style: TextStyles.drawerElements),
             onTap: () {
               //AuthService().signout();
-              Navigator.push(
-                  context, ScaleAnimationTwo(widget: ProfileScreen()));
+              Navigator.pushNamed(context, '/profile_screen');
             },
           ),
           ListTile(

@@ -112,4 +112,16 @@ class TextStyles {
       fontWeight: FontWeight.w500,
       color: Colors.white,
       fontSize: 20);
+
+  static const profileScreenTitles = TextStyle(
+    color: Colors.white,
+    fontSize: 20,
+    fontFamily: 'Raleway',
+  );
+
+  static const profileScreenValues = TextStyle(
+    color: Colors.green,
+    fontSize: 20,
+    fontFamily: 'Raleway',
+  );
 }
