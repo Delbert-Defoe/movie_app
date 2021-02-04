@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movieapp/configurations/textStyles.dart';
 import 'package:movieapp/main.dart';
 import 'package:movieapp/models/user_model.dart';
 import 'package:movieapp/models/movies_model.dart';
@@ -14,12 +15,13 @@ class ProfileScreen extends StatelessWidget {
     LocalUser user = LocalUser();
     var devHeight = MediaQuery.of(context).size.height;
     var devWidth = MediaQuery.of(context).size.width;
+    var headerHeight = devHeight / 3;
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
         title: Text(
           'Profile',
-          style: TextStyle(color: Colors.black),
+          style: TextStyles.pagetitle,
         ),
         centerTitle: true,
         leading: IconButton(
@@ -45,89 +47,109 @@ class ProfileScreen extends StatelessWidget {
         height: devHeight,
         decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [Colors.green[500], Colors.black],
-                end: Alignment.centerLeft,
-                begin: Alignment.bottomRight)),
+                colors: [Colors.green, Colors.black],
+                end: Alignment.center,
+                begin: Alignment.bottomCenter)),
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: <Widget>[
-            Center(
-              child: Container(
-                  margin: EdgeInsets.only(top: 20),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.grey[700]),
-                  //clipBehavior: Clip.hardEdge,
-                  height: devHeight / 3.5,
-                  width: devWidth / 1.7,
-                  child: Icon(
-                    Icons.person,
-                    size: devWidth / 1.7,
-                  )),
-            ),
-            user.username == null
-                ? Center(
-                    child: Text(
-                      'You are not currently Logged in',
-                      style: TextStyle(color: Colors.white),
-                    ),
+            Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Icon(Icons.person,
+                      size: 200,
+                      // color: Colors.white,
+                      //color: Theme.of(context).primaryColor,
+                      color: Colors.grey),
+                  Text(
+                    'John Doe',
+                    style: TextStyles.profileScreenTitles,
                   )
-                : Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Center(
-                        child: Text(
-                      user.username,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 50,
-                          fontWeight: FontWeight.w600),
-                    )),
-                  ),
-            Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    gradient: LinearGradient(
-                        colors: [Colors.green[900], Colors.green[400]])),
-                padding: EdgeInsets.all(15),
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'Points: ',
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
-                    ),
-                    Text(
-                      ' 500 ',
-                      style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.green[100],
-                          fontWeight: FontWeight.w600),
-                    )
-                  ],
-                )),
-            Container(
-              height: devHeight * 0.6,
-              width: devWidth,
-              decoration: BoxDecoration(
-                  color: Colors.black, borderRadius: BorderRadius.circular(20)),
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              child: Column(
+                ]),
+            Divider(
+              height: 20,
+              color: Colors.white,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.all(10),
+                  Text(
+                    'Points: ',
+                    style: TextStyles.profileScreenTitles,
+                  ),
+                  Text(
+                    '1000',
+                    style: TextStyles.profileScreenValues,
+                  )
+                ],
+              ),
+            ),
+            Divider(
+              height: 20,
+              color: Colors.white,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                alignment: WrapAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Favourite Genres: ',
+                    style: TextStyles.profileScreenTitles,
+                  ),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Horror', style: TextStyles.profileScreenValues),
+                        Text('Drama', style: TextStyles.profileScreenValues),
+                        Text('Comedy', style: TextStyles.profileScreenValues),
+                      ]),
+                  IconButton(
+                    icon: Icon(
+                      Icons.edit,
+                      size: 30,
+                      color: Colors.green,
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              height: 20,
+              color: Colors.white,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
                     child: Text(
-                      'Attended Movies:',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      'Movies Attended: ',
+                      style: TextStyles.profileScreenTitles,
                     ),
                   ),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                        maxHeight: (460), maxWidth: devWidth - 10),
-                    child: ListView(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Black Widow',
+                            style: TextStyles.profileScreenValues),
+                        Text('Jumanji The Next Level ',
+                            style: TextStyles.profileScreenValues),
+                        Text('John Wick 3',
+                            style: TextStyles.profileScreenValues),
+                        Text('Bad Boys For Life',
+                            style: TextStyles.profileScreenValues),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -142,24 +164,29 @@ class ProfileScreen extends StatelessWidget {
     var alertDialog = AlertDialog(
       title: Text(
         'Log out',
-        style: TextStyle(color: Colors.black),
+        style: TextStyle(
+            color: Colors.black,
+            fontFamily: 'Raleway',
+            fontWeight: FontWeight.w800),
       ),
       content: Text('Are you sure you want to Log Out?',
-          style: TextStyle(color: Colors.black)),
+          style: TextStyle(color: Colors.black, fontFamily: 'Raleway')),
       elevation: 6,
       backgroundColor: Colors.white,
       actions: [
         FlatButton(
           child: Text(
             'No',
-            style: TextStyle(color: Colors.green[600]),
+            style: TextStyle(color: Colors.green[600], fontFamily: 'Raleway'),
           ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         FlatButton(
-            child: Text('Yes', style: TextStyle(color: Colors.green[600])),
+            child: Text('Yes',
+                style:
+                    TextStyle(color: Colors.green[600], fontFamily: 'Raleway')),
             onPressed: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => MyApp()));

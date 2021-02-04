@@ -6,6 +6,7 @@ import '../services/authentication.dart';
 import '../services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:movieapp/models/user_model.dart';
+import 'package:movieapp/configurations/textStyles.dart';
 
 class Ticket {
   String movieTitle;
@@ -122,13 +123,15 @@ class TicketModel extends ChangeNotifier {
       return RichText(
           text: TextSpan(
         text: 'This movie is not recommended for children',
-        style: TextStyle(fontSize: 15, color: Colors.red),
+        style:
+            TextStyle(fontFamily: 'Raleway', fontSize: 15, color: Colors.red),
       ));
     } else if (movie.rating == 'PG' && typeIndex == 0) {
       return RichText(
           text: TextSpan(
         text: 'Adult accompaniment Recommended',
-        style: TextStyle(fontSize: 15, color: Colors.red),
+        style:
+            TextStyle(fontFamily: 'Raleway', fontSize: 15, color: Colors.red),
       ));
     } else {
       return Container(
@@ -169,7 +172,10 @@ class TicketModel extends ChangeNotifier {
     return Text(
       movie.timeScreen[selectedDate]['Screening'][selectedTime],
       style: TextStyle(
-          fontSize: 20, fontWeight: FontWeight.w800, color: Colors.green[200]),
+          fontFamily: 'Raleway',
+          fontSize: 25,
+          fontWeight: FontWeight.w800,
+          color: Colors.green[800]),
     );
   }
 
@@ -194,7 +200,8 @@ class TicketModel extends ChangeNotifier {
       times.add(time);
     }
     return Text(times[selectedTime],
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800));
+        style: TextStyle(
+            fontFamily: 'Raleway', fontSize: 20, fontWeight: FontWeight.w700));
   }
 
   Widget showDateWidget(Movie movie) {
@@ -214,7 +221,8 @@ class TicketModel extends ChangeNotifier {
             movie.timeScreen[selectedDate]['Date'].toDate().day.toString();
 
     return Text(day,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800));
+        style: TextStyle(
+            fontFamily: 'Raleway', fontSize: 20, fontWeight: FontWeight.w700));
   }
 
   Widget priceWidget() {
@@ -228,8 +236,9 @@ class TicketModel extends ChangeNotifier {
     double displayPrice = price / 100;
     return Text('\$ ${displayPrice.toStringAsFixed(2)}',
         style: TextStyle(
+            fontFamily: 'Raleway',
             fontSize: 30,
-            color: Colors.green[200],
+            color: Colors.green[800],
             fontWeight: FontWeight.bold));
   }
 
@@ -341,13 +350,17 @@ class TicketModel extends ChangeNotifier {
 
     //Making the Dialoge
     var alertDialog = AlertDialog(
-      title: Text('Ticket Purchase'),
+      title: Text(
+        'Ticket Purchase',
+        style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.w800),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           RichText(
               text: TextSpan(
-                  style: TextStyle(fontSize: 20, color: Colors.black),
+                  style: TextStyle(
+                      fontFamily: 'Raleway', fontSize: 20, color: Colors.black),
                   children: <TextSpan>[
                 TextSpan(text: 'Are you sure you want to purchase '),
                 TextSpan(
@@ -378,7 +391,10 @@ class TicketModel extends ChangeNotifier {
       actions: [
         FlatButton(
           child: Text('No',
-              style: TextStyle(color: Colors.green[600], fontSize: 18)),
+              style: TextStyle(
+                  fontFamily: 'Raleway',
+                  color: Colors.green[600],
+                  fontSize: 18)),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -394,7 +410,7 @@ class TicketModel extends ChangeNotifier {
               backgroundColor: Theme.of(context).primaryColor,
               content: Text(
                 'Ticket Bought',
-                style: TextStyle(fontSize: 20),
+                style: TextStyles.snackbartitle,
               ),
               duration: Duration(seconds: 1),
             ));

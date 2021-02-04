@@ -4,9 +4,9 @@ import 'package:movieapp/services/authentication.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class DatabaseService {
-  final String uid;
+  String get uid {}
 
-  DatabaseService({this.uid});
+  DatabaseService();
 
 //collection references
 
@@ -42,7 +42,10 @@ class DatabaseService {
 //Get user tickets
   Stream<QuerySnapshot> getUserTickets() async* {
     final uid = await AuthService().getCurrentUser();
-    yield* ticketCollection.where('uid', isEqualTo: uid).snapshots();
+    yield* ticketCollection
+        .where('uid', isEqualTo: uid)
+        .orderBy('dateTime', descending: false)
+        .snapshots();
   }
 
 //Get Movies

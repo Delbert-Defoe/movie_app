@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:movieapp/configurations/textStyles.dart';
 import 'package:movieapp/services/database.dart';
 import 'package:movieapp/services/local_database.dart';
 import 'package:provider/provider.dart';
@@ -24,14 +26,13 @@ class MyTicketsPage extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
-            'My Tickets',
-            style: TextStyle(color: Colors.black),
+            '🎫 My Tickets',
+            style: TextStyles.pagetitle,
           ),
         ),
         body: StreamBuilder(
             stream: db.getUserTickets(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              //if (!snapshot.hasData) noTicketsWidget(context);
               return !snapshot.hasData
                   ? _noTicketsWidget(context)
                   : ListView.builder(
@@ -39,80 +40,13 @@ class MyTicketsPage extends StatelessWidget {
                       physics: BouncingScrollPhysics(),
                       itemCount: snapshot.data.docs.length,
                       itemBuilder: (BuildContext context, int index) {
-                        // print(snapshot.data.docs.length.toString());
-
-                        return _ticketList(context,
-                            Ticket.fromData(snapshot.data.docs[index].data()));
+                        return TicketCard(
+                            ticket: Ticket.fromData(
+                                snapshot.data.docs[index].data()));
+                        // return _ticketList(context,
+                        //     Ticket.fromData(snapshot.data.docs[index].data()));
                       });
             }));
-  }
-
-  Widget _ticketList(BuildContext context, Ticket ticket) {
-    var devHeight = MediaQuery.of(context).size.height;
-    var devWidth = MediaQuery.of(context).size.width;
-
-    //Ticket ticket = Ticket.fromData(ticketSnapshot.data());
-    return GestureDetector(
-      onTap: () => {print(ticket.movieTitle)},
-      child: Flexible(
-        child: Container(
-            margin: EdgeInsets.only(top: 15),
-            height: 200,
-            width: 200,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient:
-                    LinearGradient(colors: [Colors.white, Colors.green[50]])),
-            child: Row(
-              children: <Widget>[
-                Image(
-                    fit: BoxFit.cover,
-                    width: 100,
-                    height: 400,
-                    image: AssetImage(ticket.movieImg)),
-                FractionallySizedBox(
-                  heightFactor: 0.9,
-                  //color: Colors.black,
-                  // padding: const EdgeInsets.all(8.0),
-                  child: Wrap(
-                      alignment: WrapAlignment.spaceBetween,
-                      direction: Axis.vertical,
-                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Movie: ${ticket.movieTitle}',
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Type: ${ticket.type}',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Time: ${ticket.time}',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Date: ${ticket.date}',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Quantity: ${ticket.quantity}',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ]),
-                )
-              ],
-            )),
-      ),
-    );
   }
 
   Widget _noTicketsWidget(BuildContext context) {
@@ -121,33 +55,134 @@ class MyTicketsPage extends StatelessWidget {
     return Container(
       width: devWidth,
       height: devHeight,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              colors: [Colors.green[500], Colors.black, Colors.black],
-              end: Alignment.centerLeft,
-              begin: Alignment.bottomRight)),
       child: Center(
           child: Container(
-        height: 250,
-        width: 350,
+        margin: EdgeInsets.all(20),
+        height: devWidth / 1.5,
+        width: devWidth,
         decoration: BoxDecoration(
-            color: Colors.grey[800], borderRadius: BorderRadius.circular(20)),
+            color: Colors.grey.shade200.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(20)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Icon(
               Icons.movie_filter,
               color: Colors.grey,
-              size: 100,
+              size: devWidth / 3,
             ),
             Text('No Tickets',
                 style: TextStyle(
+                    fontFamily: 'Raleway',
                     color: Colors.grey,
                     fontSize: 50,
                     fontWeight: FontWeight.w600))
           ],
         ),
       )),
+    );
+  }
+}
+
+class TicketCard extends StatelessWidget {
+  Ticket ticket;
+
+  TicketCard({@required this.ticket});
+
+  @override
+  Widget build(BuildContext context) {
+    final db = DatabaseService();
+    final _mediaQuery = MediaQuery.of(context);
+    var _orientaiton = _mediaQuery.orientation;
+    var _screenHeight = _mediaQuery.size.height;
+    var _screenWidth = _mediaQuery.size.width;
+    var _cardHeight;
+    var _cardWidth;
+    double _padding = 10.0;
+    var _borderRadius = Radius.circular(20);
+
+    if (_screenHeight < 600) {
+      _cardHeight = _screenHeight / 3;
+    } else {
+      _cardHeight = _screenHeight / 4;
+    }
+    _cardWidth = _screenWidth;
+
+    return Container(
+      height: _cardHeight,
+      width: _cardWidth,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(_borderRadius),
+        color: Colors.grey.shade200.withOpacity(0.4),
+      ),
+      margin: EdgeInsets.symmetric(vertical: _padding),
+      child: Stack(
+        fit: StackFit.expand,
+        overflow: Overflow.clip,
+        children: <Widget>[
+          FutureBuilder<String>(
+              future: db.getPicture(ticket.movieImg),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData)
+                  return Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor:
+                          Theme.of(context).primaryColor.withOpacity(0.2),
+                    ),
+                  );
+                else
+                  return ClipRRect(
+                    borderRadius: BorderRadius.all(_borderRadius),
+                    child: CachedNetworkImage(
+                      placeholder: (context, url) {
+                        return Container(
+                          height: 0,
+                          width: 0,
+                        );
+                      },
+                      imageUrl: snapshot.data,
+                      height: _cardHeight,
+                      width: _cardWidth,
+                      fit: BoxFit.cover,
+                    ),
+                  );
+              }),
+          Positioned(
+            bottom: 0,
+            child: Container(
+              height: _cardHeight / 2,
+              width: _cardWidth,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      end: Alignment.center,
+                      begin: Alignment.bottomCenter,
+                      colors: [
+                    Colors.black.withOpacity(1),
+                    Colors.black.withOpacity(0.8),
+                    Colors.black.withOpacity(0.4),
+                  ])),
+              child: Column(children: <Widget>[
+                Text(
+                  '${ticket.movieTitle}',
+                  style: TextStyles.ticketCardTitle,
+                ),
+                Text(
+                  '${ticket.date}',
+                  style: TextStyle(
+                      fontFamily: 'Raleway',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Colors.green[400]),
+                ),
+                Text(
+                  '${ticket.type} x ${ticket.quantity}',
+                  style: TextStyles.ticketCardTitle,
+                )
+              ]),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
