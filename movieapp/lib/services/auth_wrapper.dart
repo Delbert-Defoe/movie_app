@@ -12,7 +12,7 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<LocalUser>(context);
-    if (user != null) {
+    if (user == null) {
       //LocalDatabase.instance.initiateDatabase();
       return HomeScreen();
     } else {

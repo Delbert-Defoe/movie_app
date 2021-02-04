@@ -47,7 +47,7 @@ class _WeeklyMoviesState extends State<WeeklyMovies> {
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
                     children: [
                       Text('This Week', style: TextStyles.carouseltitle),
                       FlatButton(

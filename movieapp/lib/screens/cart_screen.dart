@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:movieapp/configurations/textStyles.dart';
 import 'package:movieapp/models/items_model.dart';
 import 'package:movieapp/services/authentication.dart';
@@ -177,6 +178,7 @@ class _BottomNav extends StatelessWidget {
                         : Colors.white),
               ),
               onPressed: () {
+                Feedback.forTap(context);
                 itemProvider.purchaseItems(context);
               },
               shape: RoundedRectangleBorder(

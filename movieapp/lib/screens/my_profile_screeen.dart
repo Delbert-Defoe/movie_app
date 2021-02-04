@@ -57,13 +57,14 @@ class ProfileScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Icon(Icons.person,
-                      size: 200,
-                      // color: Colors.white,
-                      //color: Theme.of(context).primaryColor,
-                      color: Colors.grey),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.grey),
+                    child: Icon(Icons.person, size: 150, color: Colors.black),
+                  ),
                   Text(
-                    'John Doe',
+                    'Delbert Defoe',
                     style: TextStyles.profileScreenTitles,
                   )
                 ]),

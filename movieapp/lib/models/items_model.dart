@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:movieapp/configurations/textStyles.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -205,6 +206,7 @@ class ItemProvider extends ChangeNotifier {
 
 //Purchasing items alert dialog
   void purchaseItems(BuildContext context) {
+    HapticFeedback.heavyImpact();
     var alertDialog = AlertDialog(
       title: Text(
         'Item Purcahse',

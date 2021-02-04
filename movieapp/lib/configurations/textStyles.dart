@@ -124,4 +124,22 @@ class TextStyles {
     fontSize: 20,
     fontFamily: 'Raleway',
   );
+
+  static const logInWelcome = TextStyle(
+    color: Colors.white,
+    fontSize: 30,
+    fontFamily: 'Raleway',
+  );
+
+  static const logInElementsBlack = TextStyle(
+    color: Colors.black,
+    fontSize: 20,
+    fontFamily: 'Raleway',
+  );
+
+  static const logInElementsWhite = TextStyle(
+    color: Colors.white,
+    fontSize: 20,
+    fontFamily: 'Raleway',
+  );
 }
