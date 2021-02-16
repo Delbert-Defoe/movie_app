@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:movieapp/configurations/textStyles.dart';
 import 'package:movieapp/main.dart';
 import 'package:movieapp/models/user_model.dart';
@@ -9,14 +10,119 @@ import 'package:movieapp/services/auth_wrapper.dart';
 import 'package:movieapp/services/auth_wrapper.dart';
 import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     var devHeight = MediaQuery.of(context).size.height;
     var devWidth = MediaQuery.of(context).size.width;
     var headerHeight = devHeight / 3;
     return SafeArea(
-        child: Scaffold(
+        child: LocalUser.instance.username == null
+            ? AnonUser()
+            : SignedUpUser(devWidth: devWidth, devHeight: devHeight));
+  }
+}
+
+class AnonUser extends StatelessWidget {
+  const AnonUser({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Profile',
+          style: TextStyles.pagetitle,
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () => {Navigator.pop(context)},
+        ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: [Colors.green, Colors.black],
+                end: Alignment.center,
+                begin: Alignment.bottomCenter)),
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0),
+                  child: Text(
+                    'Log in now to save your favourite movies and accumulate points!',
+                    style: TextStyles.profileScreenTitles,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                IntrinsicWidth(
+                  child: RaisedButton(
+                    color: Colors.white,
+                    padding: EdgeInsets.all(10),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/images/google-icon.svg',
+                          height: 30,
+                          width: 30,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: Text(
+                            'Log in with Google ',
+                            style: TextStyles.logInElementsBlack,
+                            maxLines: 3,
+                          ),
+                        )
+                      ],
+                    ),
+                    onPressed: () {
+                      LocalUser.instance.signout();
+                      LocalUser.instance.signInWithGoogle();
+                    },
+                  ),
+                ),
+              ],
+            ))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SignedUpUser extends StatelessWidget {
+  const SignedUpUser({
+    Key key,
+    @required this.devWidth,
+    @required this.devHeight,
+  }) : super(key: key);
+
+  final double devWidth;
+  final double devHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: AppBar(
         title: Text(
           'Profile',
@@ -63,7 +169,7 @@ class ProfileScreen extends StatelessWidget {
                     child: Icon(Icons.person, size: 150, color: Colors.black),
                   ),
                   Text(
-                    LocalUser.instance.username ?? 'John Doe',
+                    LocalUser.instance.username,
                     style: TextStyles.profileScreenTitles,
                   )
                 ]),
@@ -156,50 +262,50 @@ class ProfileScreen extends StatelessWidget {
           ],
         ),
       ),
-    ));
-  }
-
-  void logOutDialog(BuildContext context) {
-    var alertDialog = AlertDialog(
-      title: Text(
-        'Log out',
-        style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Raleway',
-            fontWeight: FontWeight.w800),
-      ),
-      content: Text('Are you sure you want to Log Out?',
-          style: TextStyle(color: Colors.black, fontFamily: 'Raleway')),
-      elevation: 6,
-      backgroundColor: Colors.white,
-      actions: [
-        FlatButton(
-          child: Text(
-            'No',
-            style: TextStyle(color: Colors.green[600], fontFamily: 'Raleway'),
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        FlatButton(
-            child: Text('Yes',
-                style:
-                    TextStyle(color: Colors.green[600], fontFamily: 'Raleway')),
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyApp()));
-              LocalUser.instance.signout();
-            })
-      ],
     );
-
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alertDialog;
-        });
   }
+}
+
+void logOutDialog(BuildContext context) {
+  var alertDialog = AlertDialog(
+    title: Text(
+      'Log out',
+      style: TextStyle(
+          color: Colors.black,
+          fontFamily: 'Raleway',
+          fontWeight: FontWeight.w800),
+    ),
+    content: Text('Are you sure you want to Log Out?',
+        style: TextStyle(color: Colors.black, fontFamily: 'Raleway')),
+    elevation: 6,
+    backgroundColor: Colors.white,
+    actions: [
+      FlatButton(
+        child: Text(
+          'No',
+          style: TextStyle(color: Colors.green[600], fontFamily: 'Raleway'),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+      FlatButton(
+          child: Text('Yes',
+              style:
+                  TextStyle(color: Colors.green[600], fontFamily: 'Raleway')),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MyApp()));
+            LocalUser.instance.signout();
+          })
+    ],
+  );
+
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alertDialog;
+      });
 }
 
 Widget _prefText(String pref) {

@@ -117,7 +117,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ],
                               ),
                               onPressed: () {
-                                LocalUser.instance.signInWithGoogle();
+                                LocalUser.instance.singInAnonymously();
                               },
                             ),
                           ],

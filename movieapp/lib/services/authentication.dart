@@ -55,7 +55,7 @@ class LocalUser {
               {
                 this.username = doc['name'],
                 this.preferences = List<String>.from(doc['preferences']),
-                this.points = doc['points']
+                this.points = doc['points'],
               }
           });
       return LocalUser.instance;
