@@ -22,7 +22,7 @@ class RouteGenerator {
       case "/":
         return MaterialPageRoute(
             builder: (_) => StreamProvider<LocalUser>.value(
-                  value: AuthService().user,
+                  value: LocalUser.instance.user,
                   child: Wrapper(),
                 ));
 

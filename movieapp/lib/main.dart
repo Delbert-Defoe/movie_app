@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         onGenerateRoute: RouteGenerator.generateRoute,
         home: StreamProvider<LocalUser>.value(
-          value: AuthService().user,
+          value: LocalUser.instance.user,
           child: Wrapper(),
         ));
   }

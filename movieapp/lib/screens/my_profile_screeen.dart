@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    LocalUser user = LocalUser();
     var devHeight = MediaQuery.of(context).size.height;
     var devWidth = MediaQuery.of(context).size.width;
     var headerHeight = devHeight / 3;
@@ -64,7 +63,7 @@ class ProfileScreen extends StatelessWidget {
                     child: Icon(Icons.person, size: 150, color: Colors.black),
                   ),
                   Text(
-                    'Delbert Defoe',
+                    LocalUser.instance.username ?? 'John Doe',
                     style: TextStyles.profileScreenTitles,
                   )
                 ]),
@@ -82,7 +81,7 @@ class ProfileScreen extends StatelessWidget {
                     style: TextStyles.profileScreenTitles,
                   ),
                   Text(
-                    '1000',
+                    LocalUser.instance.points.toString(),
                     style: TextStyles.profileScreenValues,
                   )
                 ],
@@ -105,9 +104,8 @@ class ProfileScreen extends StatelessWidget {
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text('Horror', style: TextStyles.profileScreenValues),
-                        Text('Drama', style: TextStyles.profileScreenValues),
-                        Text('Comedy', style: TextStyles.profileScreenValues),
+                        ...LocalUser.instance.preferences
+                            .map((pref) => _prefText(pref))
                       ]),
                   IconButton(
                     icon: Icon(
@@ -191,7 +189,7 @@ class ProfileScreen extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => MyApp()));
-              AuthService().signout();
+              LocalUser.instance.signout();
             })
       ],
     );
@@ -202,4 +200,8 @@ class ProfileScreen extends StatelessWidget {
           return alertDialog;
         });
   }
+}
+
+Widget _prefText(String pref) {
+  return Text(pref, style: TextStyles.profileScreenValues);
 }

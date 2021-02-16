@@ -88,7 +88,7 @@ class _MovieScreenState extends State<MovieScreen> {
                 padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
                 child: Text(
                   widget.movie.description,
-                  textAlign: TextAlign.justify,
+                  textAlign: TextAlign.left,
                   style: TextStyles.movieDescription,
                 ),
               ),

@@ -328,12 +328,10 @@ class TicketModel extends ChangeNotifier {
   }
 
   Future<void> buyTicket(Movie movie, BuildContext context) async {
-    var _auth = AuthService();
-
     final ticket = new Ticket();
 
-    ticket.uid = await _auth.getCurrentUser();
-    ticket.userName = LocalUser().username;
+    ticket.uid = await LocalUser.instance.getCurrentUser();
+    ticket.userName = LocalUser.instance.username;
     ticket.type = type[typeIndex];
     ticket.confirmed = true;
     ticket.dateTime =

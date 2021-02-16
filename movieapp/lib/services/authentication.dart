@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:movieapp/screens/authenticate_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -9,8 +11,18 @@ import 'package:movieapp/services/database.dart';
 import 'package:provider/provider.dart';
 import '../models/user_model.dart';
 
-class AuthService {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+class LocalUser {
+  LocalUser._privateConstructor();
+  static final LocalUser instance = LocalUser._privateConstructor();
+  static LocalUser _localUser;
+
+  String username;
+  dynamic points;
+  List<String> preferences;
+  String uid;
+  static User _firebaseUser;
+
+  static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   // final FacebookLogin _facebookLogin = FacebookLogin();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -18,7 +30,12 @@ class AuthService {
 
 //Stream listener which determines user login state
   Stream<LocalUser> get user {
-    return _firebaseAuth.authStateChanges().map(_userFromFirebaseUser);
+    return _firebaseAuth.authStateChanges().map((user) {
+      if (user != null) {
+        uid = user.uid;
+      }
+      return _userFromFirebaseUser(user);
+    });
   }
 
 //Get UID
@@ -29,41 +46,34 @@ class AuthService {
 
 //custom user object
   LocalUser _userFromFirebaseUser(User user) {
-    final LocalUser _localUser = LocalUser();
-    String uid;
-    String username;
-    List<dynamic> preferences;
-    int points;
-
     if (user != null) {
-      getUserData(user.uid).then((value) => {
-            if (value == null)
+      _firebaseUser = user;
+      getUserData(user.uid).then((doc) => {
+            if (doc == null)
               {username = null, preferences = null, points = null}
             else
               {
-                username = value['name'],
-                preferences = value['prefrences'],
-                points = value['points']
+                this.username = doc['name'],
+                this.preferences = List<String>.from(doc['preferences']),
+                this.points = doc['points']
               }
           });
-
-      return LocalUser()
-        ..uid = uid
-        ..username = username
-        ..points = points
-        ..preferences = preferences;
+      return LocalUser.instance;
     } else if (user == null) {
       return null;
     }
   }
 
   Future<Map<String, dynamic>> getUserData(String uid) async {
-    return await _databaseService.userCollection
-        .doc(uid)
-        .get()
-        .then((DocumentSnapshot document) {
-      document.exists ? document.data : null;
-    });
+    try {
+      var response = await _databaseService.userCollection.doc(uid).get();
+
+      if (response.exists) {
+        return response.data();
+      } else {
+        return null;
+      }
+    } catch (e) {}
   }
 
 //sign-in anonymously function
@@ -103,13 +113,6 @@ class AuthService {
     }
   }
 
-  //google sign out
-  Future<void> googleSignOut() async {
-    await _googleSignIn.signOut();
-    await _googleSignIn.disconnect();
-    await _firebaseAuth.signOut();
-  }
-
 //facebook sign in
 /*  Future signInWithFacebook() async {
     FacebookLoginResult result =
@@ -138,10 +141,14 @@ class AuthService {
   //Sign out
   Future signout() async {
     try {
-      return await _firebaseAuth.signOut();
+      if (_firebaseUser.providerData[0].providerId == 'google.com') {
+        _googleSignIn.disconnect();
+        _firebaseAuth.signOut();
+      } else {
+        return await _firebaseAuth.signOut();
+      }
     } catch (e) {
       print(e.toString());
-      return null;
     }
   }
   /* 

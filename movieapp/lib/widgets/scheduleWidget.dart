@@ -21,11 +21,13 @@ void showBottomModalSheet(BuildContext context) {
                     margin: EdgeInsets.only(top: 10, bottom: 5, left: 10),
                     constraints: BoxConstraints.expand(),
                     // color: Colors.black,
-                    child: Text('This week\'s Schedule:',
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold)),
+                    child: FittedBox(
+                      child: Text('This week\'s Schedule:',
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold)),
+                    ),
                   ),
                 ),
                 Flexible(
