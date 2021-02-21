@@ -12,6 +12,8 @@ import 'package:movieapp/models/movies_model.dart';
 class HomeDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    String role = LocalUser.instance.role;
+
     return Drawer(
       child: Container(
         decoration: BoxDecoration(
@@ -30,58 +32,71 @@ class HomeDrawer extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          ListTile(
-            leading: Icon(
-              Icons.movie_filter,
-              color: Colors.black,
-            ),
-            title: Text(
-              'My Tickets',
-              style: TextStyles.drawerElements,
-            ),
-            onTap: () {
-              Navigator.pushNamed(context, '/tickets_screen');
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.fastfood,
-              color: Colors.black,
-            ),
-            title: Text('Snacks', style: TextStyles.drawerElements),
-            onTap: () {
-              Navigator.pushNamed(context, '/snack_screen');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.person, color: Colors.black),
-            title: Text('Profile', style: TextStyles.drawerElements),
-            onTap: () {
-              //AuthService().signout();
-              Navigator.pushNamed(context, '/profile_screen');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.settings, color: Colors.black),
-            title: Text('Add Movie', style: TextStyles.drawerElements),
-            onTap: () {
-              Navigator.pushNamed(context, '/add_movie');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.settings, color: Colors.black),
-            title: Text('Add Snack', style: TextStyles.drawerElements),
-          ),
-          ListTile(
-            leading: Icon(Icons.settings, color: Colors.black),
-            title: Text('Scan Ticket', style: TextStyles.drawerElements),
-          ),
-          ListTile(
-            leading: Icon(Icons.settings, color: Colors.black),
-            title: Text('View Orders', style: TextStyles.drawerElements),
-          ),
+          if (role == 'user') ..._getUserList(context),
+          if (role == 'admin') ..._getAdminList(context),
+          if (role == 'dev' || role == 'user') ..._getAdminList(context),
+          if (role == 'dev' || role == 'admin') ..._getUserList(context)
         ]),
       ),
     );
+  }
+
+  List<Widget> _getUserList(BuildContext context) {
+    return [
+      ListTile(
+        leading: Icon(
+          Icons.movie_filter,
+          color: Colors.black,
+        ),
+        title: Text(
+          'My Tickets',
+          style: TextStyles.drawerElements,
+        ),
+        onTap: () {
+          Navigator.pushNamed(context, '/tickets_screen');
+        },
+      ),
+      ListTile(
+        leading: Icon(
+          Icons.fastfood,
+          color: Colors.black,
+        ),
+        title: Text('Snacks', style: TextStyles.drawerElements),
+        onTap: () {
+          Navigator.pushNamed(context, '/snack_screen');
+        },
+      ),
+      ListTile(
+        leading: Icon(Icons.person, color: Colors.black),
+        title: Text('Profile', style: TextStyles.drawerElements),
+        onTap: () {
+          Navigator.pushNamed(context, '/profile_screen');
+        },
+      ),
+    ];
+  }
+
+  List<Widget> _getAdminList(BuildContext context) {
+    return [
+      ListTile(
+        leading: Icon(Icons.settings, color: Colors.black),
+        title: Text('Manage Movies', style: TextStyles.drawerElements),
+        onTap: () {
+          Navigator.pushNamed(context, '/manage_movie_screen');
+        },
+      ),
+      ListTile(
+        leading: Icon(Icons.settings, color: Colors.black),
+        title: Text('Manage Snacks', style: TextStyles.drawerElements),
+      ),
+      ListTile(
+        leading: Icon(Icons.settings, color: Colors.black),
+        title: Text('Scan Tickets', style: TextStyles.drawerElements),
+      ),
+      ListTile(
+        leading: Icon(Icons.settings, color: Colors.black),
+        title: Text('View Orders', style: TextStyles.drawerElements),
+      ),
+    ];
   }
 }

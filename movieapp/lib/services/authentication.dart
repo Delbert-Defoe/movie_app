@@ -9,7 +9,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:movieapp/screens/home_screen.dart';
 import 'package:movieapp/services/database.dart';
 import 'package:provider/provider.dart';
-import '../models/user_model.dart';
 
 class LocalUser {
   LocalUser._privateConstructor();
@@ -20,6 +19,8 @@ class LocalUser {
   dynamic points;
   List<String> preferences;
   String uid;
+  String role;
+
   static User _firebaseUser;
 
   static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -50,12 +51,18 @@ class LocalUser {
       _firebaseUser = user;
       getUserData(user.uid).then((doc) => {
             if (doc == null)
-              {username = null, preferences = null, points = null}
+              {
+                username = null,
+                preferences = null,
+                points = null,
+                role = 'user'
+              }
             else
               {
                 this.username = doc['name'],
                 this.preferences = List<String>.from(doc['preferences']),
                 this.points = doc['points'],
+                this.role = doc['role']
               }
           });
       return LocalUser.instance;

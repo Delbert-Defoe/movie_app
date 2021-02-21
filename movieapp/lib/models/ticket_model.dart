@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:movieapp/models/user_model.dart';
+
 import 'package:provider/provider.dart';
 import '../models/movies_model.dart';
 import '../services/authentication.dart';
 import '../services/database.dart';
 import 'package:flutter/material.dart';
-import 'package:movieapp/models/user_model.dart';
+
 import 'package:movieapp/configurations/textStyles.dart';
 
 class Ticket {

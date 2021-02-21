@@ -50,7 +50,7 @@ class CartScreen extends StatelessWidget {
                       'Cart Empty',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 30,
+                          fontSize: 25,
                           fontFamily: 'Raleway'),
                     ),
                     SizedBox(height: 20),
@@ -63,7 +63,7 @@ class CartScreen extends StatelessWidget {
                       child: Text(
                         'Buy Food!',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
+                        style: TextStyle(fontSize: 18, fontFamily: 'Raleway'),
                       ),
                       onPressed: () {
                         Navigator.pop(context);
@@ -158,7 +158,7 @@ class _BottomNav extends StatelessWidget {
             Text(
               'Total : \$ ${itemProvider.cartTotal().toStringAsFixed(2)}',
               style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 20,
                   fontStyle: FontStyle.italic,
                   fontFamily: 'Raleway',
                   fontWeight: FontWeight.w300,
@@ -170,7 +170,7 @@ class _BottomNav extends StatelessWidget {
               child: Text(
                 'Purchase',
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontFamily: 'Raleway',
                     fontWeight: FontWeight.w600,
                     color: itemProvider.cartTotal() == 0
@@ -184,7 +184,7 @@ class _BottomNav extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               color: Colors.green[500],
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.all(10),
             )
           ],
         ));

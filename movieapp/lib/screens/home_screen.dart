@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movieapp/configurations/textStyles.dart';
 import 'package:movieapp/widgets/this_week_movies_widget.dart';
 import 'package:movieapp/widgets/upcoming_movies.dart';
-import 'package:movieapp/models/user_model.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/movies_model.dart';
 import '../screens/movie_screen.dart';
@@ -40,8 +40,14 @@ class HomeScreen extends StatelessWidget {
       ),
       drawer: HomeDrawer(),
       body: ListView(physics: BouncingScrollPhysics(), children: <Widget>[
-        WeeklyMovies(),
-        UpcomingMovies(),
+        LimitedBox(
+            maxHeight: _screenheight - kToolbarHeight,
+            child: Column(
+              children: [
+                WeeklyMovies(),
+                UpcomingMovies(),
+              ],
+            ))
       ]),
     );
   }

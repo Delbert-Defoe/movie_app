@@ -30,8 +30,8 @@ class _UpcomingMoviesState extends State<UpcomingMovies> {
     if (_mediaQuery.size.height < 450) {
       _carouselHeight = _mediaQuery.size.height;
     }
-    return Container(
-        height: _carouselHeight,
+    return Flexible(
+        flex: 1,
         child: Column(children: [
           Flexible(
             flex: 3,

@@ -33,8 +33,8 @@ class _WeeklyMoviesState extends State<WeeklyMovies> {
       _carouselHeight = _mediaQuery.size.height;
     }
 
-    return Container(
-        height: _carouselHeight,
+    return Flexible(
+        flex: 1,
         child: Column(children: [
           Flexible(
             flex: 2,

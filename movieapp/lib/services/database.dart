@@ -64,9 +64,8 @@ class DatabaseService {
 */
 
 //Variables
-  StorageReference movieStorage =
-      FirebaseStorage.instance.ref().child("movies");
-  StorageReference itemStorage = FirebaseStorage.instance.ref().child("items");
+  Reference movieStorage = FirebaseStorage.instance.ref().child("movies");
+  Reference itemStorage = FirebaseStorage.instance.ref().child("items");
 
   Future<String> getPicture(String path) async {
     String imgUrl = await movieStorage.child(path).getDownloadURL();

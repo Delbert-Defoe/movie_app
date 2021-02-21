@@ -27,6 +27,9 @@ class _AuthScreenState extends State<AuthScreen> {
     var _borderRadius = Radius.circular(20);
 
     return SafeArea(
+      left: true,
+      right: true,
+      minimum: EdgeInsets.all(20),
       child: Scaffold(
         body: Container(
           child: Column(
@@ -43,9 +46,13 @@ class _AuthScreenState extends State<AuthScreen> {
                           'assets/images/EmeraldLogo.svg',
                           height: constraints.maxHeight / 1.2,
                         ),
-                        Text(
-                          'Welcome!',
-                          style: TextStyles.logInWelcome,
+                        FittedBox(
+                          fit: BoxFit.cover,
+                          child: Text(
+                            'Welcome To Emerald Movies App!',
+                            style: TextStyles.logInWelcome,
+                            maxLines: 2,
+                          ),
                         )
                       ],
                     );

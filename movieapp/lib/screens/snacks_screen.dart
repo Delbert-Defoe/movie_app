@@ -269,17 +269,19 @@ class _CartIcon extends StatelessWidget {
 }
 
 void _itemSnackbar(Item item, BuildContext context) {
-  Scaffold.of(context).showSnackBar(SnackBar(
-    backgroundColor: Theme.of(context).primaryColor,
-    content: Container(
-      height: kBottomNavigationBarHeight * 0.5,
-      width: double.infinity,
-      alignment: Alignment.center,
-      child: Text(
-        ' + ${item.name} Added To Cart !  🛒',
-        style: TextStyles.snackbartitle,
+  Scaffold.of(context)
+    ..removeCurrentSnackBar()
+    ..showSnackBar(SnackBar(
+      backgroundColor: Theme.of(context).primaryColor,
+      content: Container(
+        height: kBottomNavigationBarHeight * 0.5,
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: Text(
+          ' + ${item.name} Added To Cart !  🛒',
+          style: TextStyles.snackbartitle,
+        ),
       ),
-    ),
-    duration: Duration(seconds: 1),
-  ));
+      duration: Duration(seconds: 2),
+    ));
 }

@@ -5,7 +5,6 @@ import 'package:movieapp/screens/noRoute_screen.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
-import 'package:movieapp/models/user_model.dart';
 import 'package:movieapp/services/authentication.dart';
 import 'package:movieapp/services/auth_wrapper.dart';
 import 'package:movieapp/screens/cart_screen.dart';
@@ -13,6 +12,7 @@ import 'package:movieapp/screens/home_screen.dart';
 import 'package:movieapp/screens/movie_screen.dart';
 import 'package:movieapp/screens/my_profile_screeen.dart';
 import 'package:movieapp/screens/snacks_screen.dart';
+import 'package:movieapp/screens/manage_movies_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -43,6 +43,9 @@ class RouteGenerator {
 
       case "/profile_screen":
         return MaterialPageRoute(builder: (_) => ProfileScreen());
+
+      case "/manage_movie_screen":
+        return MaterialPageRoute(builder: (_) => ManageMoviesPage());
 
       default:
         return MaterialPageRoute(builder: (_) => NoRouteScreen());

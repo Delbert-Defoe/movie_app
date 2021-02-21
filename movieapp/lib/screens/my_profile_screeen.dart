@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:movieapp/configurations/textStyles.dart';
 import 'package:movieapp/main.dart';
-import 'package:movieapp/models/user_model.dart';
+
 import 'package:movieapp/models/movies_model.dart';
 import 'package:movieapp/screens/home_screen.dart';
 import 'package:movieapp/services/authentication.dart';
@@ -95,9 +95,10 @@ class AnonUser extends StatelessWidget {
                         )
                       ],
                     ),
-                    onPressed: () {
-                      LocalUser.instance.signout();
-                      LocalUser.instance.signInWithGoogle();
+                    onPressed: () async {
+                      await LocalUser.instance.signout();
+                      await LocalUser.instance.signInWithGoogle();
+                      Navigator.of(context).pop();
                     },
                   ),
                 ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movieapp/models/items_model.dart';
-import 'package:movieapp/models/user_model.dart';
 import 'package:movieapp/screens/authenticate_screen.dart';
 import 'package:movieapp/services/auth_wrapper.dart';
 import 'package:movieapp/services/authentication.dart';

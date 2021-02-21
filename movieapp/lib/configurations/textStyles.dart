@@ -142,4 +142,17 @@ class TextStyles {
     fontSize: 20,
     fontFamily: 'Raleway',
   );
+
+  static const textFieldLabel = TextStyle(
+    color: Colors.white,
+    fontSize: 15,
+    fontStyle: FontStyle.italic,
+    fontFamily: 'Raleway',
+  );
+
+  static const textFieldValue = TextStyle(
+    color: Colors.white,
+    fontFamily: 'Raleway',
+    fontSize: 18,
+  );
 }
